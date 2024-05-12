@@ -1,19 +1,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 	<channel>
 		<title>Posts on Polyvaria</title>
-		<link>http://localhost:1313/posts/</link>
+		<link>https://polyvaria.com/posts/</link>
 		<description>Recent content in Posts on Polyvaria</description>
 		<generator>Hugo -- gohugo.io</generator>
 		<language>en-us</language>
 		<lastBuildDate>Sun, 10 Mar 2024 14:31:07 -0400</lastBuildDate>
-		<atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+		<atom:link href="https://polyvaria.com/posts/index.xml" rel="self" type="application/rss+xml" />
 		
 		<item>
 			<title>First Post</title>
-			<link>http://localhost:1313/posts/first-post/</link>
+			<link>https://polyvaria.com/posts/first-post/</link>
 			<pubDate>Sun, 10 Mar 2024 14:31:07 -0400</pubDate>
 			
-			<guid>http://localhost:1313/posts/first-post/</guid>
+			<guid>https://polyvaria.com/posts/first-post/</guid>
 			<description>Hello </description>
 			<content type="html"><![CDATA[<h2 id="hello">Hello</h2>
 ]]></content>

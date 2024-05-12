@@ -1,4 +1,4 @@
-baseURL = 'https://example.org/'
+baseURL = 'https://polyvaria.com/'
 languageCode = 'en-us'
 title = 'Polyvaria'
 theme = 'hermit-v2'

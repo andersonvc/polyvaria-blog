@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on Polyvaria</title>
-    <link>http://localhost:1313/tags/</link>
+    <link>https://polyvaria.com/tags/</link>
     <description>Recent content in Tags on Polyvaria</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 10 Mar 2024 14:31:07 -0400</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://polyvaria.com/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Untagged</title>
-      <link>http://localhost:1313/tags/untagged/</link>
+      <link>https://polyvaria.com/tags/untagged/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/tags/untagged/</guid>
+      <guid>https://polyvaria.com/tags/untagged/</guid>
       <description></description>
     </item>
   </channel>
