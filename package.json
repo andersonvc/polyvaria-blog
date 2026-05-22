@@ -1,0 +1,17 @@
+{
+  "name": "polyvaria-webpage",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Polyvaria public-facing fund homepage. Static, no SSR.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --port 4173",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "~5.7.3",
+    "vite": "^7.1.7"
+  }
+}

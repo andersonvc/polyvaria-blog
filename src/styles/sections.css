@@ -1,0 +1,510 @@
+/*
+  Per-section styling: hero, thesis, approach (flow), library, principles,
+  platform (stack).
+*/
+
+/* ──────────────────────────────────────────────────────────────
+   Hero
+   ────────────────────────────────────────────────────────────── */
+
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  align-items: center;
+  padding: calc(var(--nav-h) + var(--space-8)) var(--shell-gutter) var(--space-9);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.hero__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.hero__grain {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, transparent 0%, transparent 60%, var(--ink-1) 100%),
+    radial-gradient(circle at 50% 40%, transparent 40%, var(--ink-1) 90%);
+  mix-blend-mode: normal;
+}
+
+.hero__content {
+  max-width: var(--shell-max);
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  position: relative;
+  z-index: 1;
+  animation: heroFadeIn 1400ms var(--ease-out) both;
+}
+
+@keyframes heroFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.hero__title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--t-display-xl);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+  color: var(--cream-0);
+  margin: 0;
+}
+
+.hero__title-line {
+  display: block;
+}
+.hero__title-line--accent {
+  color: var(--copper-0);
+  font-style: italic;
+  font-weight: 300;
+}
+
+.hero__sub {
+  max-width: 46ch;
+  font-size: var(--t-lede);
+  line-height: var(--leading-prose);
+  color: var(--cream-2);
+}
+
+.hero__meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-5);
+  margin-top: var(--space-4);
+}
+
+.hero__divider {
+  display: inline-block;
+  width: 1px;
+  height: 16px;
+  background: var(--hairline-strong);
+}
+
+.hero__location {
+  font-family: var(--font-mono);
+  font-size: var(--t-mono);
+  letter-spacing: var(--tracking-loose);
+  text-transform: uppercase;
+  color: var(--cream-3);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Thesis
+   ────────────────────────────────────────────────────────────── */
+
+.section--thesis .section__title {
+  font-size: var(--t-display);
+}
+
+/*
+  Prose layout: paragraphs flow as a single column on the left,
+  the pillar list anchors top-right and spans whatever vertical
+  space the prose ends up occupying.
+*/
+.section__body--prose {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.62fr);
+  gap: var(--space-5) var(--space-8);
+  align-items: start;
+}
+
+.section__body--prose > .lede,
+.section__body--prose > p {
+  grid-column: 1;
+}
+
+.section__body--prose > .pillar-list {
+  grid-column: 2;
+  grid-row: 1 / -1;
+  align-self: start;
+}
+
+@media (max-width: 880px) {
+  .section__body--prose {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+  .section__body--prose > .lede,
+  .section__body--prose > p,
+  .section__body--prose > .pillar-list {
+    grid-column: 1;
+    grid-row: auto;
+  }
+}
+
+.lede {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.2rem, 1.85vw, 1.55rem);
+  line-height: 1.4;
+  letter-spacing: var(--tracking-tight);
+  color: var(--cream-0);
+}
+
+.section__body--prose > p:not(.lede) {
+  color: var(--cream-2);
+  font-size: var(--t-body);
+  line-height: var(--leading-prose);
+  max-width: var(--measure);
+}
+
+/*
+  Pillar list — three short standalone statements. No numbering, no
+  bullets. A thin copper rule on the left replaces the per-item marker
+  and groups them as a single block of related claims.
+*/
+.pillar-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 var(--space-5);
+  border-left: 1px solid var(--copper-2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.pillar-list li {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 1.4vw, 1.18rem);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--cream-1);
+  letter-spacing: var(--tracking-tight);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Approach — the six-stage flow
+   ────────────────────────────────────────────────────────────── */
+
+.section--approach .section__header {
+  margin-bottom: var(--space-7);
+}
+
+.flow {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--hairline);
+  border: 1px solid var(--hairline);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+@media (min-width: 1024px) {
+  .flow {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .flow {
+    grid-template-columns: 1fr;
+  }
+}
+
+.flow__step {
+  position: relative;
+  background: var(--ink-2);
+  padding: var(--space-6) var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-height: 280px;
+  transition: background var(--dur-med) var(--ease-out);
+}
+.flow__step:hover {
+  background: var(--ink-3);
+}
+
+.flow__index {
+  font-family: var(--font-mono);
+  font-size: var(--t-mono);
+  letter-spacing: var(--tracking-loose);
+  color: var(--copper-1);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.flow__index::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--hairline);
+}
+
+.flow__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.flow__title {
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 1.9vw, 1.6rem);
+  font-weight: 500;
+  line-height: 1.18;
+  letter-spacing: var(--tracking-tight);
+  color: var(--cream-0);
+}
+
+.flow__lead {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 0.98rem;
+  color: var(--copper-0);
+  margin-top: -0.3rem;
+}
+
+.flow__text {
+  color: var(--cream-2);
+  font-size: 0.94rem;
+  line-height: 1.62;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Library (bento)
+   ────────────────────────────────────────────────────────────── */
+
+.library {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1px;
+  background: var(--hairline);
+  border: 1px solid var(--hairline);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.library-tile {
+  position: relative;
+  background: var(--ink-2);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-height: 180px;
+  transition: background var(--dur-med) var(--ease-out);
+}
+.library-tile:hover {
+  background: var(--ink-3);
+}
+
+.library-tile__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.library-tile__name {
+  font-family: var(--font-display);
+  font-size: 1.18rem;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--cream-0);
+  letter-spacing: var(--tracking-tight);
+}
+
+.library-tile__count {
+  font-family: var(--font-mono);
+  font-size: var(--t-mono);
+  letter-spacing: var(--tracking-loose);
+  color: var(--copper-1);
+  white-space: nowrap;
+}
+
+.library-tile__premise {
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--cream-2);
+}
+
+.library-tile__tags {
+  margin-top: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.library-tile__tag {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: var(--tracking-loose);
+  text-transform: uppercase;
+  color: var(--cream-3);
+  padding: 0.18rem 0.5rem;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 999px;
+}
+
+.library__footer {
+  margin-top: var(--space-6);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-5);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--hairline);
+  flex-wrap: wrap;
+}
+
+.library__count {
+  font-family: var(--font-mono);
+  font-size: var(--t-mono);
+  letter-spacing: var(--tracking-loose);
+  text-transform: uppercase;
+  color: var(--copper-1);
+}
+
+.library__note {
+  max-width: 58ch;
+  color: var(--cream-2);
+  font-size: var(--t-small);
+  line-height: 1.6;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Principles
+   ────────────────────────────────────────────────────────────── */
+
+.principles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  border-top: 1px solid var(--hairline-strong);
+}
+@media (max-width: 880px) {
+  .principles { grid-template-columns: 1fr; }
+}
+
+/*
+  Principles render as a quiet 2x2 grid of long-form text blocks,
+  separated by hairlines. No card chrome, no icons, no big roman
+  numerals — closer to the rhythm of a printed white paper.
+*/
+.principle {
+  position: relative;
+  padding: var(--space-6) var(--space-5) var(--space-6) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  border-bottom: 1px solid var(--hairline);
+}
+.principle:nth-child(odd) {
+  padding-right: var(--space-7);
+  border-right: 1px solid var(--hairline);
+}
+.principle:nth-child(odd) {
+  padding-left: 0;
+}
+.principle:nth-child(even) {
+  padding-left: var(--space-7);
+}
+.principle:nth-last-child(-n + 2) {
+  border-bottom: 0;
+}
+@media (max-width: 880px) {
+  .principle,
+  .principle:nth-child(odd),
+  .principle:nth-child(even) {
+    padding: var(--space-6) 0;
+    border-right: 0;
+  }
+  .principle:nth-last-child(-n + 2) {
+    border-bottom: 1px solid var(--hairline);
+  }
+  .principle:last-child { border-bottom: 0; }
+}
+
+/* Small copper marker above each principle in place of the dropped
+   roman numeral — a single short hairline. */
+.principle::before {
+  content: "";
+  display: block;
+  width: 28px;
+  height: 1px;
+  background: var(--copper-1);
+  margin-bottom: var(--space-3);
+}
+
+.principle__title {
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 1.6vw, 1.4rem);
+  line-height: 1.25;
+  letter-spacing: var(--tracking-tight);
+  color: var(--cream-0);
+  font-weight: 500;
+}
+
+.principle__text {
+  color: var(--cream-2);
+  font-size: 0.96rem;
+  line-height: 1.65;
+  max-width: 54ch;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Platform — the stack list
+   ────────────────────────────────────────────────────────────── */
+
+.stack {
+  margin: 0;
+  border-top: 1px solid var(--hairline-strong);
+}
+
+.stack__row {
+  display: grid;
+  grid-template-columns: minmax(0, 0.36fr) minmax(0, 1fr);
+  gap: var(--space-6);
+  padding: var(--space-5) 0;
+  border-bottom: 1px solid var(--hairline);
+  align-items: baseline;
+}
+
+@media (max-width: 720px) {
+  .stack__row {
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+  }
+}
+
+.stack__term {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--t-mono);
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--cream-3);
+  align-self: baseline;
+}
+
+.stack__def {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 1.5vw, 1.25rem);
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--cream-0);
+  letter-spacing: var(--tracking-tight);
+}
+
