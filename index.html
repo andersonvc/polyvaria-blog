@@ -36,14 +36,18 @@
     <header class="site-nav" data-nav>
       <a class="site-nav__brand" href="#top" aria-label="Polyvaria home">
         <svg class="site-nav__mark" viewBox="0 0 24 24" aria-hidden="true">
-          <path
-            d="M 3 4 L 3 20 M 3 4 L 7 4 C 9.5 4 10.5 5.5 10.5 7.5 C 10.5 9.5 9.5 11 7 11 L 3 11 M 12 4 L 16 20 L 20 4"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.8"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
+          <g stroke="currentColor" fill="currentColor" stroke-linecap="round">
+            <line x1="12" y1="4" x2="4.5" y2="18" stroke-width="0.9" opacity="0.55"/>
+            <line x1="12" y1="4" x2="19.5" y2="18" stroke-width="0.9" opacity="0.55"/>
+            <line x1="4.5" y1="18" x2="19.5" y2="18" stroke-width="0.9" opacity="0.55"/>
+            <line x1="12" y1="13.3" x2="12" y2="4" stroke-width="0.9" opacity="0.55"/>
+            <line x1="12" y1="13.3" x2="4.5" y2="18" stroke-width="0.9" opacity="0.55"/>
+            <line x1="12" y1="13.3" x2="19.5" y2="18" stroke-width="0.9" opacity="0.55"/>
+            <circle cx="12" cy="4" r="1.6"/>
+            <circle cx="4.5" cy="18" r="1.6"/>
+            <circle cx="19.5" cy="18" r="1.6"/>
+            <circle cx="12" cy="13.3" r="1.6"/>
+          </g>
         </svg>
         <span class="site-nav__wordmark">Polyvaria</span>
       </a>
