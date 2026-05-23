@@ -1,7 +1,8 @@
 /*
   Render the Library bento grid from FAMILIES, plus the running total
-  in the footer ("43 implemented across 15 families · 88 candidates
-  in active research").
+  in the footer ("42 implemented across 15 families · 82 candidates
+  in active research"). The numbers are summed from FAMILIES at
+  render time, not hardcoded.
 */
 
 import { FAMILIES } from "../content/library";

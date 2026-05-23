@@ -7,16 +7,16 @@
     <meta name="color-scheme" content="dark" />
     <meta name="theme-color" content="#0b0d12" />
 
-    <title>Polyvaria — A multi-agent quantitative portfolio fund</title>
+    <title>Polyvaria - A multi-agent quantitative portfolio fund</title>
     <meta
       name="description"
-      content="Polyvaria is a multi-agent quantitative portfolio platform. Forty-three independent signal agents, one factor-orthogonal portfolio, point-in-time by construction."
+      content="Polyvaria is a multi-agent quantitative portfolio platform. Forty-two uncorrelated signals feed one factor-orthogonal long-only equity book."
     />
 
     <meta property="og:title" content="Polyvaria" />
     <meta
       property="og:description"
-      content="A multi-agent quantitative portfolio fund. Forty-three independent signal agents, one factor-orthogonal portfolio, point-in-time by construction."
+      content="A multi-agent quantitative portfolio fund. Forty-two uncorrelated signals feed one factor-orthogonal long-only equity book."
     />
     <meta property="og:type" content="website" />
 
@@ -52,7 +52,22 @@
         <span class="site-nav__wordmark">Polyvaria</span>
       </a>
 
-      <nav class="site-nav__links" aria-label="Primary">
+      <button
+        class="site-nav__toggle"
+        type="button"
+        data-nav-toggle
+        aria-label="Menu"
+        aria-expanded="false"
+        aria-controls="primary-nav"
+      >
+        <span class="site-nav__toggle-bars" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+      </button>
+
+      <nav id="primary-nav" class="site-nav__links" aria-label="Primary" data-nav-links>
         <a href="#thesis" data-nav-link>Thesis</a>
         <a href="#approach" data-nav-link>Approach</a>
         <a href="#library" data-nav-link>Library</a>
@@ -69,7 +84,7 @@
         <div class="hero__content">
           <p class="eyebrow">
             <span class="eyebrow__dot" aria-hidden="true"></span>
-            Quantitative · Systematic · Long-only
+            <span>Long&#8209;only · systematic</span>
           </p>
 
           <h1 id="hero-title" class="hero__title">
@@ -79,9 +94,7 @@
           </h1>
 
           <p class="hero__sub">
-            Forty-three independent signal agents.
-            One factor-orthogonal portfolio.
-            Point-in-time by construction.
+            The architecture of a top multi-manager fund, operated by self-coordinating agent teams. Forty-two uncorrelated signals running in production today.
           </p>
 
           <div class="hero__meta">
@@ -107,26 +120,17 @@
 
         <div class="section__body section__body--prose">
           <p class="lede">
-            A multi-strategy hedge fund is a federation of independent
-            pods — each a PM, a quant team, a book. Pod count has
-            always tracked headcount.
+            The world's largest quant funds and multi-manager platforms are built the same way: dozens of independent research pods hunting alpha, with a deep back office of data, infrastructure, and risk underneath. Polyvaria runs that same architecture, with self-coordinating agent teams in the seats.
           </p>
 
           <p>
-            Multi-agent capability closed that gap in the last six
-            months. Polyvaria runs the same federation with autonomous
-            agent teams in place of seats. Quant and dev pods
-            <em>build</em> the back office and the research stack, and
-            operate them live. Practitioners set the strategy, validate
-            the research, and own the book. Ideas and infrastructure
-            scale at the speed of compute — the ceiling rises with
-            every model release.
+            Each research pod continuously evaluates new, uncorrelated sources of alpha, and adding another pod is a deployment rather than a hire. The data onboarding, backtesting, risk-modeling, and transaction-cost-analysis stack underneath the research pods is built and validated by agents too, so the research backlog never bottlenecks behind a finite engineering bench. This is not speculative: OpenAI's reasoning models recently disproved a longstanding conjecture in discrete geometry, demonstrating research-grade capability that did not exist a year ago. Aimed at a research and platform backlog, that capability <em>outpaces</em> the engineering throughput of even the largest funds.
           </p>
 
           <ul class="pillar-list" role="list">
-            <li>Pods as agent teams. Practitioners at the helm.</li>
-            <li>R&amp;D and infra at the speed of compute.</li>
-            <li>Asymmetric exposure to model capability.</li>
+            <li>The structure of a top multi-manager, replicated by self-coordinating agent teams.</li>
+            <li>Research pods at compute scale, each hunting uncorrelated alpha.</li>
+            <li>A back office that scales ahead of research demand, covering data, backtest, risk, and transaction-cost analysis.</li>
           </ul>
         </div>
       </section>
@@ -136,8 +140,7 @@
           <p class="section__eyebrow">Approach</p>
           <h2 class="section__title">The pipeline.</h2>
           <p class="section__kicker">
-            The same code runs a daily rebalance and a multi-year historical
-            replay. The only difference between them is the as-of date.
+            The same code runs the live daily rebalance and the multi-year historical backtest. As-of date is the only thing that changes between them.
           </p>
         </header>
 
@@ -158,13 +161,16 @@
           <li class="flow__step" data-reveal>
             <div class="flow__index"><span>02</span></div>
             <div class="flow__body">
-              <h3 class="flow__title">Signal Agents</h3>
-              <p class="flow__lead">Forty-three independent views.</p>
+              <h3 class="flow__title">Alpha Research</h3>
+              <p class="flow__lead">Forty-two uncorrelated, durable signals.</p>
               <p class="flow__text">
-                Each agent ingests price, fundamental, event, or news data and
-                produces a cross-sectional ranking. Value, momentum, quality,
-                capital discipline, low-risk, reversal, liquidity, post-earnings
-                drift, sentiment.
+                A research pipeline ingests price, fundamental, event, and
+                news data and produces cross-sectional rankings of the
+                universe. Signal families span value, momentum, quality,
+                capital discipline, defensive, reversal, liquidity,
+                post-earnings drift, and sentiment. Every candidate has to
+                clear an orthogonality and decay-resistance bar before it
+                earns a weight in the live book.
               </p>
             </div>
           </li>
@@ -172,12 +178,14 @@
           <li class="flow__step" data-reveal>
             <div class="flow__index"><span>03</span></div>
             <div class="flow__body">
-              <h3 class="flow__title">Aggregation</h3>
-              <p class="flow__lead">Sector-neutral, factor-residualized.</p>
+              <h3 class="flow__title">Macro Regime</h3>
+              <p class="flow__lead">Conditional signal weighting.</p>
               <p class="flow__text">
-                Raw signals are winsorized, z-scored within sector, then
-                residualized against the Fama-French factors. What remains
-                is an expected-return vector orthogonal to known risk premia.
+                A regime classifier across volatility state, yield-curve
+                shape, growth/inflation quadrant, and breadth maps the
+                current market to a weighting overlay. Momentum, defensive, value,
+                and reversal families lean in or out of the book as the
+                regime shifts, rather than being statically blended.
               </p>
             </div>
           </li>
@@ -185,13 +193,16 @@
           <li class="flow__step" data-reveal>
             <div class="flow__index"><span>04</span></div>
             <div class="flow__body">
-              <h3 class="flow__title">Risk Model</h3>
-              <p class="flow__lead">Five-factor structural.</p>
+              <h3 class="flow__title">Factor Risk Model</h3>
+              <p class="flow__lead">Five-factor structural, rolling exposures.</p>
               <p class="flow__text">
                 Market, size, value, profitability, and investment exposures
-                are estimated with rolling regression. The resulting covariance
-                enters the optimization objective directly, with shrinkage
-                on residual variance.
+                are estimated with rolling regression. Raw signals are
+                winsorized, z-scored within sector, and residualized against
+                the factor structure, leaving an expected-return vector
+                orthogonal to known risk premia. The same factor covariance
+                enters the optimizer's objective directly, with shrinkage on
+                residual variance.
               </p>
             </div>
           </li>
@@ -199,13 +210,14 @@
           <li class="flow__step" data-reveal>
             <div class="flow__index"><span>05</span></div>
             <div class="flow__body">
-              <h3 class="flow__title">Optimizer</h3>
-              <p class="flow__lead">Constrained mean-variance.</p>
+              <h3 class="flow__title">Portfolio Optimizer</h3>
+              <p class="flow__lead">Constrained mean-variance, warm-started.</p>
               <p class="flow__text">
                 A conic solver maximizes expected return net of risk and
-                transaction cost, subject to long-only, sector,
-                capitalization-bucket, single-name, and turnover constraints.
-                Warm-started for stability across rebalances.
+                transaction cost, subject to long-only, sector, market-cap,
+                single-name, and turnover constraints. The daily solve
+                warm-starts from the previous one, keeping the trade list
+                stable across rebalances.
               </p>
             </div>
           </li>
@@ -214,11 +226,15 @@
             <div class="flow__index"><span>06</span></div>
             <div class="flow__body">
               <h3 class="flow__title">Execution</h3>
-              <p class="flow__lead">Reconciled and idempotent.</p>
+              <p class="flow__lead">Cost-aware, routed, measured.</p>
               <p class="flow__text">
-                Target weights become a share-level trade list. Orders carry
-                deterministic identifiers so retries are safe. Holdings are
-                reconciled against broker positions before each rebalance.
+                A scheduling layer slices parent orders across the day
+                against a spread-and-impact model, with participation caps
+                and child-order routing tuned to venue liquidity. Post-trade
+                TCA feeds realized cost back into the optimizer's
+                transaction-cost term. The cost curve the platform trades
+                against tomorrow is calibrated on what it actually paid
+                yesterday.
               </p>
             </div>
           </li>
@@ -230,9 +246,10 @@
           <p class="section__eyebrow">Research Library</p>
           <h2 class="section__title">Fifteen families of signal.</h2>
           <p class="section__kicker">
-            Each strategy is implemented as a standalone agent and validated
-            against its own information coefficient before it earns weight
-            in the live portfolio.
+            A team of research agents owns each family, mining its domain
+            for high-IC signals against the platform's backtester and
+            historical archive. A candidate only earns a live weight
+            after clearing an IC bar on a holdout window.
           </p>
         </header>
 
@@ -241,9 +258,8 @@
         <footer class="library__footer">
           <span class="library__count" data-library-count></span>
           <span class="library__note">
-            New strategies enter at configuration velocity. Adding a signal,
-            cost model, or constraint does not require changes to the
-            registry or to any code on the trading-critical path.
+            New strategies land at configuration velocity. A new signal, cost
+            model, or constraint touches no code on the trading-critical path.
           </span>
         </footer>
       </section>
@@ -251,10 +267,11 @@
       <section id="principles" class="section section--principles" data-section="principles">
         <header class="section__header">
           <p class="section__eyebrow">Principles</p>
-          <h2 class="section__title">Recursive <em>self-improvement</em>.</h2>
+          <h2 class="section__title">Capability <em>compounds</em>.</h2>
           <p class="section__kicker">
-            Every layer of the stack has its own feedback loop. The agents
-            that close those loops get stronger with every model release.
+            Every layer of the stack has a feedback loop attached to it. As the
+            underlying models improve, those loops close faster and the platform
+            sharpens with them.
           </p>
         </header>
 
@@ -266,41 +283,41 @@
               coefficient over the prediction horizon. Decaying signals are
               flagged before they earn weight. The machine-learning overlay
               refits on a walk-forward schedule with an embargo that prevents
-              leakage. Each cycle, new hypotheses enter the cache, evidence
-              accumulates, weights adjust.
+              leakage, and each evaluation cycle adds new hypotheses to the
+              cache and shifts the weights on the old ones.
             </p>
           </article>
 
           <article class="principle" data-reveal>
-            <h3 class="principle__title">Strategy as a search problem.</h3>
+            <h3 class="principle__title">A configuration-defined stack.</h3>
             <p class="principle__text">
               Factor model, exposure estimator, covariance assembler,
-              constraints, cost model — each component is hot-swappable from
-              configuration. The backtest-replay tooling lets agent pods run
-              counterfactual configurations against history and surface the
-              parameter and component choices that improve attribution.
+              constraints, cost model: each component is hot-swappable from
+              configuration. Backtest-replay tooling lets agent pods run
+              counterfactual configurations against history and reports which
+              parameter and component choices move attribution.
             </p>
           </article>
 
           <article class="principle" data-reveal>
-            <h3 class="principle__title">Execution calibrated by its own fills.</h3>
+            <h3 class="principle__title">Self-calibrating execution.</h3>
             <p class="principle__text">
-              Linear and square-root impact coefficients in the cost model
-              are calibrated against realized broker reconciliation. Holdings
-              are reconciled before every rebalance; a repair routine
-              adjusts for fills that miss. As trade history accumulates,
-              the impact model and the execution layer sharpen with it.
+              Linear and square-root impact coefficients in the cost model are
+              calibrated against realized broker fills. Holdings are reconciled
+              before every rebalance; a repair routine adjusts for fills that
+              miss. As trade history accumulates, the impact model and the
+              execution layer learn from it.
             </p>
           </article>
 
           <article class="principle" data-reveal>
-            <h3 class="principle__title">The operational surface widens with model capability.</h3>
+            <h3 class="principle__title">Operators authoring the platform.</h3>
             <p class="principle__text">
-              Pipelines, monitors, data ingest, and the platform code itself
-              are authored and maintained by the same agent pods that operate
-              the system. Each step-up in the underlying models widens what
-              gets built, debugged, and shipped without human intervention.
-              The platform compounds.
+              Pipelines, monitors, data ingest, the backtesting harness, and the
+              platform code itself are built, validated, and continuously
+              improved by the same agent pods that operate the system. The
+              result is engineering throughput beyond what human-staffed teams
+              at the largest funds can match.
             </p>
           </article>
         </div>
@@ -350,7 +367,7 @@
       <div class="site-foot__row site-foot__row--meta">
         <span data-year>2026</span>
         <span class="site-foot__sep" aria-hidden="true">·</span>
-        <span>No solicitation. No advice. Informational only.</span>
+        <span>Informational. Not a solicitation or investment advice.</span>
       </div>
     </footer>
   </body>

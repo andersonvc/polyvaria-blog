@@ -31,12 +31,14 @@
   --font-mono:    "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
   /* Source Serif sits cleaner at large sizes than Fraunces; we don't
-     need to push the display sizes as aggressively to land impact. */
-  --t-display-xl: clamp(3rem, 6.4vw, 5.75rem);
-  --t-display:    clamp(2.25rem, 4.4vw, 3.75rem);
-  --t-h2:         clamp(1.85rem, 3.4vw, 2.85rem);
+     need to push the display sizes as aggressively to land impact.
+     The lower bounds are tuned so single words ("portfolio fund.",
+     "quantitative") don't break across two lines on 320–360px phones. */
+  --t-display-xl: clamp(2.35rem, 6.4vw, 5.75rem);
+  --t-display:    clamp(1.95rem, 4.4vw, 3.75rem);
+  --t-h2:         clamp(1.6rem, 3.4vw, 2.85rem);
   --t-h3:         clamp(1.1rem, 1.4vw, 1.3rem);
-  --t-lede:       clamp(1.05rem, 1.3vw, 1.2rem);
+  --t-lede:       clamp(1.0rem, 1.3vw, 1.2rem);
   --t-body:       1rem;
   --t-small:      0.875rem;
   --t-mono:       0.76rem;

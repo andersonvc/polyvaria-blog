@@ -25,6 +25,51 @@ export function mountNav(): void {
   onScroll();
   window.addEventListener("scroll", onScroll, { passive: true });
 
+  // ── mobile menu toggle ─────────────────────────────────────────
+  // Visible only at the mobile breakpoint via CSS. The button is in
+  // the DOM at all widths so the binding is unconditional.
+  const toggle = nav.querySelector<HTMLButtonElement>("[data-nav-toggle]");
+  if (toggle) {
+    const openMenu = () => {
+      nav.classList.add("is-menu-open");
+      toggle.setAttribute("aria-expanded", "true");
+    };
+    const closeMenu = () => {
+      nav.classList.remove("is-menu-open");
+      toggle.setAttribute("aria-expanded", "false");
+    };
+    toggle.addEventListener("click", () => {
+      if (nav.classList.contains("is-menu-open")) closeMenu();
+      else openMenu();
+    });
+    // Tapping a link inside the open menu closes it before the browser
+    // jumps the scroll position to the anchor.
+    for (const link of links) {
+      link.addEventListener("click", () => {
+        if (nav.classList.contains("is-menu-open")) closeMenu();
+      });
+    }
+    // Escape closes when the menu has focus or anywhere on the page.
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && nav.classList.contains("is-menu-open")) {
+        closeMenu();
+        toggle.focus();
+      }
+    });
+    // If the viewport crosses back above the mobile breakpoint while
+    // the menu is open, drop the open state so the desktop bar isn't
+    // stuck in mobile-overlay layout.
+    const mql = window.matchMedia("(min-width: 721px)");
+    const onMqlChange = (ev: MediaQueryListEvent | MediaQueryList) => {
+      if (ev.matches) closeMenu();
+    };
+    if (typeof mql.addEventListener === "function") {
+      mql.addEventListener("change", onMqlChange);
+    } else if (typeof (mql as MediaQueryList & { addListener?: (cb: (ev: MediaQueryListEvent) => void) => void }).addListener === "function") {
+      (mql as MediaQueryList & { addListener: (cb: (ev: MediaQueryListEvent) => void) => void }).addListener(onMqlChange);
+    }
+  }
+
   // ── active link ────────────────────────────────────────────────
   if (!("IntersectionObserver" in window)) return;
 
