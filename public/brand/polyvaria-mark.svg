@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Polyvaria mark">
+  <!--
+    Polyvaria — the constraint polytope.
+    In constrained portfolio optimization the set of feasible books is a
+    convex polytope; the solve lands on a vertex where constraints bind.
+    The copper vertex is that corner. Poly (many) / varia (variants):
+    many signals, one feasible book.
+  -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M32 5.5 L56.5 18.5 L53 45 L35.5 31.5 Z" fill="#C9A36B" fill-opacity="0.12" stroke="none"/>
+    <path d="M53 45 L28.5 58.5 L8 44 L35.5 31.5 Z" fill="#ECE7DC" fill-opacity="0.04" stroke="none"/>
+    <path d="M8 44 L11.5 17 L32 5.5 L35.5 31.5 Z" fill="#ECE7DC" fill-opacity="0.06" stroke="none"/>
+    <path d="M53 45 L28.5 58.5 L8 44 L11.5 17 L32 5.5" stroke="#C9A36B" stroke-width="1.5" opacity="0.62"/>
+    <path d="M32 5.5 L56.5 18.5 L53 45" stroke="#C9A36B" stroke-width="1.7"/>
+    <path d="M35.5 31.5 L32 5.5 M35.5 31.5 L53 45 M35.5 31.5 L8 44" stroke="#C9A36B" stroke-width="1.05" opacity="0.38"/>
+    <g fill="#ECE7DC" stroke="none" opacity="0.5">
+      <circle cx="32" cy="5.5" r="1.25"/>
+      <circle cx="53" cy="45" r="1.25"/>
+      <circle cx="28.5" cy="58.5" r="1.25"/>
+      <circle cx="8" cy="44" r="1.25"/>
+      <circle cx="11.5" cy="17" r="1.25"/>
+      <circle cx="35.5" cy="31.5" r="1.25"/>
+    </g>
+    <circle cx="56.5" cy="18.5" r="6.8" stroke="#E0BC85" stroke-width="0.9" opacity="0.4"/>
+    <circle cx="56.5" cy="18.5" r="3.4" fill="#E0BC85" stroke="none"/>
+  </g>
+</svg>
