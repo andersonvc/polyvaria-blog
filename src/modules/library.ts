@@ -36,7 +36,7 @@ export function mountLibrary(): void {
     premise.className = "library-tile__premise";
     premise.textContent = fam.premise;
 
-    tile.append(head, premise);
+    tile.append(head, ratioBar(fam.liveCount, fam.candidateCount), premise);
 
     if (fam.tags && fam.tags.length) {
       const tags = document.createElement("div");
@@ -68,4 +68,26 @@ function formatCount(live: number, candidate: number): string {
   if (live === 0) return `${candidate} candidate`;
   if (candidate === 0) return `${live} live`;
   return `${live} live · ${candidate} candidate`;
+}
+
+/*
+  Thin segmented bar: the live share of the family's researched signals
+  in copper, the still-candidate share as a faint hairline. Pure data,
+  drawn from the same counts shown beside the family name.
+*/
+function ratioBar(live: number, candidate: number): HTMLElement {
+  const total = live + candidate;
+  const bar = document.createElement("div");
+  bar.className = "library-tile__bar";
+  bar.setAttribute("role", "img");
+  bar.setAttribute(
+    "aria-label",
+    total > 0 ? `${live} of ${total} researched signals are live` : "no signals yet",
+  );
+
+  const fill = document.createElement("span");
+  fill.className = "library-tile__bar-fill";
+  fill.style.width = total > 0 ? `${(live / total) * 100}%` : "0%";
+  bar.append(fill);
+  return bar;
 }

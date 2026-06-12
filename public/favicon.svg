@@ -1,15 +1,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!--
+    Polyvaria mark: the constraint polytope.
+    A feasible region drawn as a faceted wireframe; the copper vertex is
+    where the optimizer lands - the corner where constraints bind.
+  -->
   <rect width="32" height="32" rx="6" fill="#0b0d12"/>
-  <g stroke="#C9A36B" fill="#C9A36B" stroke-linecap="round">
-    <line x1="16" y1="6" x2="5.5" y2="25" stroke-width="1.2" opacity="0.55"/>
-    <line x1="16" y1="6" x2="26.5" y2="25" stroke-width="1.2" opacity="0.55"/>
-    <line x1="5.5" y1="25" x2="26.5" y2="25" stroke-width="1.2" opacity="0.55"/>
-    <line x1="16" y1="18.7" x2="16" y2="6" stroke-width="1.2" opacity="0.55"/>
-    <line x1="16" y1="18.7" x2="5.5" y2="25" stroke-width="1.2" opacity="0.55"/>
-    <line x1="16" y1="18.7" x2="26.5" y2="25" stroke-width="1.2" opacity="0.55"/>
-    <circle cx="16" cy="6" r="2.2"/>
-    <circle cx="5.5" cy="25" r="2.2"/>
-    <circle cx="26.5" cy="25" r="2.2"/>
-    <circle cx="16" cy="18.7" r="2.2"/>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <!-- facets -->
+    <path d="M16 5.4 L25.8 10.6 L24.4 21.2 L17.4 15.8 Z" fill="#C9A36B" fill-opacity="0.12" stroke="none"/>
+    <path d="M24.4 21.2 L14.6 26.6 L6.4 20.8 L17.4 15.8 Z" fill="#ECE7DC" fill-opacity="0.04" stroke="none"/>
+    <path d="M6.4 20.8 L7.8 10 L16 5.4 L17.4 15.8 Z" fill="#ECE7DC" fill-opacity="0.06" stroke="none"/>
+    <!-- silhouette -->
+    <path d="M24.4 21.2 L14.6 26.6 L6.4 20.8 L7.8 10 L16 5.4" stroke="#C9A36B" stroke-width="1.4" opacity="0.62"/>
+    <!-- binding edges into the optimal vertex -->
+    <path d="M16 5.4 L25.8 10.6 L24.4 21.2" stroke="#C9A36B" stroke-width="1.6"/>
+    <!-- interior structure -->
+    <path d="M17.4 15.8 L16 5.4 M17.4 15.8 L24.4 21.2 M17.4 15.8 L6.4 20.8" stroke="#C9A36B" stroke-width="1" opacity="0.38"/>
+    <!-- the optimal vertex -->
+    <circle cx="25.8" cy="10.6" r="3.4" stroke="#E0BC85" stroke-width="0.8" opacity="0.4"/>
+    <circle cx="25.8" cy="10.6" r="2" fill="#E0BC85" stroke="none"/>
   </g>
 </svg>

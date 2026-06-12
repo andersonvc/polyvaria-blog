@@ -40,7 +40,7 @@ export const FAMILIES: Family[] = [
   {
     name: "Capital Discipline",
     premise:
-      "Aggressive investing firms tend to underperform; conservative reinvesters earn a premium.",
+      "Firms that invest aggressively tend to underperform the ones that reinvest with restraint.",
     liveCount: 3,
     candidateCount: 5,
     tags: ["fundamentals"],
@@ -64,7 +64,7 @@ export const FAMILIES: Family[] = [
   {
     name: "Reversal",
     premise:
-      "Short-horizon and very long-horizon winners revert; distinct mechanisms operate across distinct windows.",
+      "Winners revert at short horizons and again at very long ones, for different reasons at each.",
     liveCount: 3,
     candidateCount: 2,
     tags: ["price"],
@@ -72,7 +72,7 @@ export const FAMILIES: Family[] = [
   {
     name: "Liquidity",
     premise:
-      "Harder-to-trade names earn a premium; the long leg must be filtered for executability.",
+      "Harder-to-trade names earn a premium; the catch is staying executable at rebalance.",
     liveCount: 2,
     candidateCount: 5,
     tags: ["microstructure"],
@@ -80,7 +80,7 @@ export const FAMILIES: Family[] = [
   {
     name: "Earnings & Events",
     premise:
-      "Prices underreact to earnings surprises; the drift is extractable over a window of weeks.",
+      "Prices underreact to earnings surprises, and the drift persists for weeks after the print.",
     liveCount: 5,
     candidateCount: 5,
     tags: ["events"],
@@ -112,7 +112,7 @@ export const FAMILIES: Family[] = [
   {
     name: "Technical",
     premise:
-      "A handful of chart patterns survive scrutiny; useful as features in a meta-model.",
+      "A handful of chart patterns survive scrutiny, mostly as features in a meta-model rather than signals on their own.",
     liveCount: 1,
     candidateCount: 5,
     tags: ["price"],
@@ -120,7 +120,7 @@ export const FAMILIES: Family[] = [
   {
     name: "Alternative Data",
     premise:
-      "Orthogonal data sources reveal demand and fundamentals ahead of financial reporting.",
+      "Data from outside the filing cycle shows demand shifts before they reach reported numbers.",
     liveCount: 1,
     candidateCount: 7,
     tags: ["alt-data"],
@@ -128,7 +128,7 @@ export const FAMILIES: Family[] = [
   {
     name: "Composite",
     premise:
-      "Blended sleeves diversify factor-timing risk and stabilize what any single signal can deliver.",
+      "Blends across families spread factor-timing risk that any single sleeve would concentrate.",
     liveCount: 2,
     candidateCount: 7,
     tags: ["meta"],

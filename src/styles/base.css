@@ -84,6 +84,22 @@ button {
 }
 .skip-link:focus { top: 12px; }
 
+/* ── Reading progress hairline ────────────────────────────────── */
+
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 120;
+  background: linear-gradient(90deg, var(--copper-2), var(--copper-0));
+  opacity: 0.85;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  pointer-events: none;
+}
+
 /* ── Typographic primitives ───────────────────────────────── */
 
 h1, h2, h3, h4 {
@@ -179,11 +195,10 @@ p { margin: 0; }
 }
 
 .site-nav__wordmark {
-  font-family: var(--font-sans);
-  font-size: 0.92rem;
+  font-family: var(--font-display);
+  font-size: 1.12rem;
   font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  letter-spacing: 0.008em;
 }
 
 .site-nav__links {
@@ -412,11 +427,11 @@ main {
   gap: 0.65rem;
 }
 .site-foot__brand {
-  font-family: var(--font-sans);
-  font-size: 0.82rem;
+  font-family: var(--font-display);
+  font-size: 1rem;
   font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  letter-spacing: 0.008em;
+  text-transform: none;
   color: var(--cream-0);
 }
 .site-foot__sep { color: var(--cream-4); }
