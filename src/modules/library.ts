@@ -1,8 +1,12 @@
 /*
   Render the Library bento grid from FAMILIES, plus the running total
-  in the footer ("42 implemented across 15 families · 82 candidates
+  in the footer ("45 implemented across 13 families · 251 candidates
   in active research"). The numbers are summed from FAMILIES at
   render time, not hardcoded.
+
+  Thirteen family tiles can never close a rectangle on their own (13 is
+  prime), so two empty tiles pad the last row after Seasonal; CSS hides
+  one or both at the narrower column counts.
 */
 
 import { FAMILIES } from "../content/library";
@@ -11,6 +15,9 @@ export function mountLibrary(): void {
   const grid = document.querySelector<HTMLElement>("[data-library]");
   const count = document.querySelector<HTMLElement>("[data-library-count]");
   if (!grid) return;
+
+  const live = FAMILIES.reduce((a, f) => a + f.liveCount, 0);
+  const cand = FAMILIES.reduce((a, f) => a + f.candidateCount, 0);
 
   const frag = document.createDocumentFragment();
 
@@ -53,11 +60,20 @@ export function mountLibrary(): void {
     frag.append(tile);
   }
 
+  // Two empty tiles close the rectangle after Seasonal (13 family
+  // tiles never tile it alone). Both show at 5-up and 3-up; one is
+  // hidden at 2-up and both on phones, where the counts work out.
+  for (let i = 0; i < 2; i++) {
+    const empty = document.createElement("div");
+    empty.className = "library-tile library-tile--empty";
+    empty.setAttribute("data-reveal", "");
+    empty.setAttribute("aria-hidden", "true");
+    frag.append(empty);
+  }
+
   grid.append(frag);
 
   if (count) {
-    const live = FAMILIES.reduce((a, f) => a + f.liveCount, 0);
-    const cand = FAMILIES.reduce((a, f) => a + f.candidateCount, 0);
     count.textContent =
       `${live} implemented across ${FAMILIES.length} families · ${cand} candidates in active research`;
   }

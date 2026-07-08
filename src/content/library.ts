@@ -1,14 +1,15 @@
 /*
-  The fifteen alpha families that compose Polyvaria's signal surface.
-  Counts and premise lines derived from the platform's signal library;
-  worded for a public audience (no implementation detail or returns).
+  The thirteen alpha families that compose Polyvaria's signal surface.
+  Live counts follow the platform's derived-signal registry; candidate
+  counts follow the research library's documented hypothesis cache.
+  Worded for a public audience (no implementation detail or returns).
 */
 
 export type Family = {
   name: string;
   premise: string;
-  liveCount: number;       // implemented agents in this family
-  candidateCount: number;  // researched, not currently weighted
+  liveCount: number;       // signals in the production registry
+  candidateCount: number;  // documented hypotheses, not currently weighted
   tags?: string[];
 };
 
@@ -16,121 +17,105 @@ export const FAMILIES: Family[] = [
   {
     name: "Value",
     premise:
-      "Firms cheap on accounting fundamentals tend to outperform across multi-quarter horizons.",
-    liveCount: 6,
-    candidateCount: 7,
+      "Firms cheap on accounting fundamentals outperform over multi-quarter horizons; the sleeve leans on cash-flow yields, where the premium has stayed durable.",
+    liveCount: 4,
+    candidateCount: 20,
     tags: ["fundamentals"],
   },
   {
     name: "Momentum",
     premise:
-      "Recent relative winners persist over six- to twelve-month horizons through underreaction and flow.",
-    liveCount: 4,
-    candidateCount: 7,
+      "Recent relative winners persist over six- to twelve-month horizons; the sleeve spans classic, intermediate, residual, and industry-relative forms.",
+    liveCount: 6,
+    candidateCount: 24,
     tags: ["price"],
   },
   {
     name: "Quality",
     premise:
-      "High-margin, high-return-on-capital firms compound faster and are systematically underpriced.",
-    liveCount: 5,
-    candidateCount: 8,
+      "High-profitability firms compound faster than the market prices in; cash-based measures screen out the accrual noise.",
+    liveCount: 6,
+    candidateCount: 28,
     tags: ["fundamentals"],
   },
   {
     name: "Capital Discipline",
     premise:
       "Firms that invest aggressively tend to underperform the ones that reinvest with restraint.",
-    liveCount: 3,
-    candidateCount: 5,
+    liveCount: 4,
+    candidateCount: 18,
     tags: ["fundamentals"],
   },
   {
     name: "Shareholder Yield",
     premise:
-      "Cash returned to shareholders is a cleaner read on value than reported earnings.",
+      "Cash returned through dividends and net buybacks is a cleaner read on value than reported earnings.",
     liveCount: 2,
-    candidateCount: 3,
+    candidateCount: 8,
     tags: ["fundamentals"],
   },
   {
     name: "Defensive",
     premise:
-      "Low-volatility and low-beta names generate higher risk-adjusted returns than CAPM predicts.",
-    liveCount: 4,
-    candidateCount: 3,
+      "Low-volatility names earn better risk-adjusted returns than CAPM says they should.",
+    liveCount: 2,
+    candidateCount: 12,
     tags: ["risk"],
   },
   {
     name: "Reversal",
     premise:
-      "Winners revert at short horizons and again at very long ones, for different reasons at each.",
-    liveCount: 3,
-    candidateCount: 2,
+      "Short-horizon losers bounce; the clean version strips factor moves first and skips earnings windows entirely.",
+    liveCount: 4,
+    candidateCount: 14,
     tags: ["price"],
   },
   {
     name: "Liquidity",
     premise:
       "Harder-to-trade names earn a premium; the catch is staying executable at rebalance.",
-    liveCount: 2,
-    candidateCount: 5,
+    liveCount: 1,
+    candidateCount: 10,
     tags: ["microstructure"],
   },
   {
     name: "Earnings & Events",
     premise:
       "Prices underreact to earnings surprises, and the drift persists for weeks after the print.",
-    liveCount: 5,
-    candidateCount: 5,
+    liveCount: 6,
+    candidateCount: 30,
     tags: ["events"],
   },
   {
-    name: "Sentiment",
+    name: "Analyst & Sentiment",
     premise:
-      "Aggregate beliefs in news and positioning data leak information not yet reflected in price.",
-    liveCount: 3,
-    candidateCount: 7,
+      "Estimate revisions, dispersion, rating actions, and news flow leak information before price fully carries it.",
+    liveCount: 5,
+    candidateCount: 26,
     tags: ["nlp", "events"],
+  },
+  {
+    name: "Interaction & Composites",
+    premise:
+      "Signals conditioned on each other beat signals added together: momentum confirmed by earnings, cheapness gated by quality.",
+    liveCount: 4,
+    candidateCount: 41,
+    tags: ["meta"],
   },
   {
     name: "Macro",
     premise:
-      "Cross-sectional returns are partly explained by exposure to rates, dollar, and oil regimes.",
+      "Cross-sectional returns partly reflect exposure to rates and the curve; treated as conditioning, never as timing.",
     liveCount: 1,
-    candidateCount: 5,
+    candidateCount: 12,
     tags: ["macro"],
   },
   {
     name: "Seasonal",
     premise:
-      "Persistent calendar effects like turn-of-month and pre-announcement drift are small but additive.",
+      "Calendar effects are researched and, so far, documented dead. The graveyard keeps them from coming back.",
     liveCount: 0,
-    candidateCount: 6,
+    candidateCount: 8,
     tags: ["calendar"],
-  },
-  {
-    name: "Technical",
-    premise:
-      "A handful of chart patterns survive scrutiny, mostly as features in a meta-model rather than signals on their own.",
-    liveCount: 1,
-    candidateCount: 5,
-    tags: ["price"],
-  },
-  {
-    name: "Alternative Data",
-    premise:
-      "Data from outside the filing cycle shows demand shifts before they reach reported numbers.",
-    liveCount: 1,
-    candidateCount: 7,
-    tags: ["alt-data"],
-  },
-  {
-    name: "Composite",
-    premise:
-      "Blends across families spread factor-timing risk that any single sleeve would concentrate.",
-    liveCount: 2,
-    candidateCount: 7,
-    tags: ["meta"],
   },
 ];
