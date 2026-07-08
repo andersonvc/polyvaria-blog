@@ -333,7 +333,7 @@ main {
 .section {
   max-width: var(--shell-max);
   margin: 0 auto;
-  padding: var(--space-10) var(--shell-gutter);
+  padding: var(--space-9) var(--shell-gutter);
   scroll-margin-top: calc(var(--nav-h) + 1rem);
 }
 

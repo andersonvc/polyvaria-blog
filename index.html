@@ -11,13 +11,13 @@
     <title>Polyvaria — Multi-agent quantitative investment platform</title>
     <meta
       name="description"
-      content="Polyvaria runs the research floor of a multi-manager fund with agent teams: independent research pods under principal-investigator orchestration, 42 production signals screened for orthogonality, one long-only U.S. equity book."
+      content="Polyvaria runs the research floor of a multi-manager fund with agent teams: independent research pods under principal-investigator orchestration, every result recomputed in a sandbox and cryptographically signed, one long-only U.S. equity book."
     />
 
     <meta property="og:title" content="Polyvaria" />
     <meta
       property="og:description"
-      content="A multi-manager research floor, run by agent teams. 42 production signals, one long-only U.S. equity book."
+      content="A multi-manager research floor, run by agent teams. 45 production signals, verified by gates their authors can't touch. One long-only U.S. equity book."
     />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="/brand/og.png" />
@@ -69,9 +69,11 @@
 
       <nav id="primary-nav" class="site-nav__links" aria-label="Primary" data-nav-links>
         <a href="#thesis" data-nav-link>Thesis</a>
+        <a href="#loop" data-nav-link>Loop</a>
         <a href="#approach" data-nav-link>Approach</a>
         <a href="#library" data-nav-link>Library</a>
-        <a href="#principles" data-nav-link>Principles</a>
+        <a href="#data" data-nav-link>Data</a>
+        <a href="#trust" data-nav-link>Trust</a>
         <a href="#controls" data-nav-link>Controls</a>
         <a href="#platform" data-nav-link>Stack</a>
       </nav>
@@ -98,9 +100,9 @@
             <p class="hero__sub">
               A multi-agent quantitative investment platform: independent
               research pods under principal-investigator orchestration,
-              feeding one long-only U.S. equity book. 42 signals in
-              production today, each screened to add alpha the book doesn't
-              already hold.
+              feeding one long-only U.S. equity book. 45 signals in
+              production, 250+ hypotheses documented, and nothing reaches
+              the book on any agent's word alone.
             </p>
 
             <div class="hero__meta">
@@ -131,19 +133,179 @@
           </p>
 
           <p>
-            Polyvaria removes that limit. Its research pods are agent teams directed by centralized principal-investigator orchestration: priorities and risk budgets flow down, results and attribution flow up. A pod develops its hypotheses from idea through implementation against the shared backtester and submits the survivors for validation. The PI layer moves compute toward the families earning it, retires lines of research that stall, and keeps the shared record of what has already failed, so no pod re-runs a dead hypothesis. Adding a pod is a deployment rather than a hire, and research breadth grows with compute; the gates still decide what earns weight in one book.
+            Polyvaria removes that limit. Its research pods are agent teams directed by centralized principal-investigator orchestration: priorities and risk budgets flow down, results and attribution flow up. A pod develops its hypotheses from idea through implementation against the shared backtester and submits the survivors for validation. The PI layer moves compute toward the families earning it and retires lines of research that stall. It also keeps the shared record of what has already failed, and a dead hypothesis doesn't get run twice. Adding a pod is a deployment rather than a hire. Research breadth grows with compute, and the gates still decide what earns weight in one book.
           </p>
 
           <p>
-            The platform underneath is staffed the same way. Risk modeling, portfolio optimization, execution, data onboarding, and backtesting are each owned by an independent agent team working continuously on that subsystem's quality and fidelity. None of it was practical until reasoning models could carry a research loop end to end and have the result clear the same bar as human work. Now that they can, breadth is an orchestration problem.
+            The platform underneath is staffed the same way. The data service, the backtester, risk, optimization, and execution are separate systems, each owned by its own agent team with its own quality rules. The separation is deliberate. A research pod cannot touch the referee that scores it or the data room it reads from, so there is no way to cheat, only to pass. Every result is recomputed from pinned inputs, and the verdict is cryptographically signed with keys no agent holds. That is what makes the breadth safe to scale. The gates don't care whether the work came from an agent or a human.
           </p>
 
           <ul class="pillar-list" role="list">
             <li>Research pods scale horizontally; orchestration stays centralized.</li>
             <li>Multi-manager breadth, single-book risk discipline.</li>
-            <li>Validation gates the research pods don't own.</li>
+            <li>No result earns weight until the platform has recomputed it.</li>
           </ul>
         </div>
+      </section>
+
+      <section id="loop" class="section section--loop" data-section="loop">
+        <header class="section__header">
+          <p class="section__eyebrow">Research</p>
+          <h2 class="section__title">The research loop.</h2>
+          <p class="section__kicker">
+            It starts when the platform notices a weakness in the book: a
+            decaying signal, a corner of the market with no coverage. An
+            agentic principal investigator turns the gap into funded
+            research, pods build candidate signals, and a statistical
+            validation gate judges what they produce. Survivors are
+            deployed and watched, the watching surfaces the next weakness,
+            and humans govern the whole loop without sitting inside it.
+          </p>
+        </header>
+
+        <figure class="loop-figure" data-reveal>
+          <div class="loop-figure__scroll">
+          <svg viewBox="0 0 1180 580" role="img" aria-labelledby="loop-title loop-desc">
+            <title id="loop-title">The Polyvaria research loop</title>
+            <desc id="loop-desc">
+              A closed research loop that runs continuously. The platform
+              senses decay, crowding, and coverage gaps in the live book and
+              drafts its own research mandates. A human governor sits
+              outside the loop, ratifying mandates, setting risk budgets,
+              and holding the halt. The PI agent treats compute as capital
+              and funds research themes by the evidence they produce. A
+              hypothesis swarm generates diverse candidate ideas, checking
+              dead ideas first. Research pods build signals with data on
+              demand while a standing red team attacks every candidate
+              before trial. The validation gate judges: combinatorial purged
+              cross-validation, a deflated Sharpe bar, a ceiling on the
+              probability of backtest overfitting, leakage tripwires, and
+              marginal value to the book, with machine-signed verdicts.
+              Survivors start small and earn weight, and day-one monitoring
+              of every new signal feeds the sensing that starts the next
+              turn. Rejects hibernate in institutional memory with revisit
+              tripwires. A second-order loop runs alongside: playbooks and
+              protocols are themselves experiments.
+            </desc>
+
+            <defs>
+              <marker id="ld-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0 0.5 L7.5 4 L0 7.5 Z" class="ld-arrowhead" />
+              </marker>
+              <marker id="ld-arrow-copper" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0 0.5 L7.5 4 L0 7.5 Z" class="ld-arrowhead--copper" />
+              </marker>
+            </defs>
+
+            <!-- ring: sense → allocate → generate → build → validate → deploy → sense -->
+            <line class="ld-line ld-line--flow" x1="280" y1="164" x2="324" y2="164" marker-end="url(#ld-arrow)" />
+            <line class="ld-line ld-line--flow" x1="520" y1="164" x2="564" y2="164" marker-end="url(#ld-arrow)" />
+            <line class="ld-line ld-line--flow" x1="665" y1="208" x2="665" y2="294" marker-end="url(#ld-arrow)" />
+            <line class="ld-line ld-line--flow" x1="570" y1="344" x2="526" y2="344" marker-end="url(#ld-arrow)" />
+            <line class="ld-line ld-line--flow" x1="330" y1="344" x2="286" y2="344" marker-end="url(#ld-arrow)" />
+            <line class="ld-line ld-line--flow" x1="185" y1="300" x2="185" y2="214" marker-end="url(#ld-arrow)" />
+
+            <!-- cycle affordance, ring center -->
+            <path class="ld-line ld-line--soft ld-line--flow" d="M390 232 A22 22 0 1 1 368 254" marker-end="url(#ld-arrow)" />
+            <text class="ld-count" x="425" y="258">runs continuously</text>
+
+            <!-- governance drops (dashed, outside-in) -->
+            <line class="ld-line ld-line--soft" x1="185" y1="72" x2="185" y2="116" marker-end="url(#ld-arrow)" />
+            <line class="ld-line ld-line--soft" x1="425" y1="72" x2="425" y2="116" marker-end="url(#ld-arrow)" />
+
+            <!-- second-order loop feed -->
+            <line class="ld-line ld-line--soft" x1="830" y1="164" x2="766" y2="164" marker-end="url(#ld-arrow)" />
+            <text class="ld-flowlabel" x="798" y="156" text-anchor="middle">upgrades</text>
+
+            <!-- data on demand -->
+            <line class="ld-line" x1="760" y1="330" x2="824" y2="330" marker-end="url(#ld-arrow)" />
+            <line class="ld-line" x1="824" y1="358" x2="766" y2="358" marker-end="url(#ld-arrow)" />
+            <text class="ld-flowlabel" x="792" y="322" text-anchor="middle">request</text>
+            <text class="ld-flowlabel" x="795" y="350" text-anchor="middle">serve</text>
+
+            <!-- memory exchange (dashed copper) -->
+            <line class="ld-line ld-line--return" x1="425" y1="388" x2="425" y2="464" marker-end="url(#ld-arrow-copper)" />
+            <line class="ld-line ld-line--return" x1="665" y1="470" x2="665" y2="394" marker-end="url(#ld-arrow-copper)" />
+            <text class="ld-reject" x="433" y="430">verdicts · rejects</text>
+            <text class="ld-reject" x="673" y="430">consulted first</text>
+
+            <!-- human governance, outside the loop -->
+            <rect class="ld-data" x="90" y="30" width="430" height="42" rx="10" />
+            <text class="ld-eyebrow" x="106" y="48">HUMAN GOVERNANCE</text>
+            <text class="ld-sub" x="106" y="63">Ratifies mandates · sets risk budgets · holds the halt</text>
+
+            <!-- 01 sense -->
+            <rect class="ld-card" x="90" y="120" width="190" height="88" rx="10" />
+            <text class="ld-eyebrow" x="106" y="144">THE PLATFORM</text>
+            <text class="ld-idx" x="264" y="144" text-anchor="end">01</text>
+            <text class="ld-title" x="106" y="168">Sense</text>
+            <text class="ld-sub" x="106" y="186">Decay, crowding, coverage</text>
+            <text class="ld-sub" x="106" y="201">gaps become draft mandates.</text>
+
+            <!-- 02 allocate -->
+            <rect class="ld-card" x="330" y="120" width="190" height="88" rx="10" />
+            <text class="ld-eyebrow" x="346" y="144">PI AGENT</text>
+            <text class="ld-idx" x="504" y="144" text-anchor="end">02</text>
+            <text class="ld-title" x="346" y="168">Allocate</text>
+            <text class="ld-sub" x="346" y="186">Compute is capital; themes</text>
+            <text class="ld-sub" x="346" y="201">earn it by evidence produced.</text>
+
+            <!-- 03 generate -->
+            <rect class="ld-card" x="570" y="120" width="190" height="88" rx="10" />
+            <text class="ld-eyebrow" x="586" y="144">HYPOTHESIS SWARM</text>
+            <text class="ld-idx" x="744" y="144" text-anchor="end">03</text>
+            <text class="ld-title" x="586" y="168">Generate</text>
+            <text class="ld-sub" x="586" y="186">Diverse pods recombine ideas;</text>
+            <text class="ld-sub" x="586" y="201">dead ideas checked first.</text>
+            <text class="ld-count" x="665" y="110" text-anchor="middle">251 hypotheses documented</text>
+
+            <!-- 04 build & duel -->
+            <rect class="ld-card" x="570" y="300" width="190" height="88" rx="10" />
+            <text class="ld-eyebrow" x="586" y="324">PODS + RED TEAM</text>
+            <text class="ld-idx" x="744" y="324" text-anchor="end">04</text>
+            <text class="ld-title" x="586" y="348">Build &amp; Duel</text>
+            <text class="ld-sub" x="586" y="366">Signals built data-on-demand,</text>
+            <text class="ld-sub" x="586" y="381">then attacked before trial.</text>
+
+            <!-- 05 validation gate -->
+            <rect class="ld-gate" x="330" y="300" width="190" height="88" rx="10" />
+            <text class="ld-eyebrow" x="346" y="324">VALIDATION GATE</text>
+            <text class="ld-idx" x="504" y="324" text-anchor="end">05</text>
+            <text class="ld-title" x="346" y="348">Verify</text>
+            <text class="ld-sub" x="346" y="366">CPCV · deflated Sharpe · PBO</text>
+            <text class="ld-sub" x="346" y="381">tripwires · marginal value.</text>
+
+            <!-- 06 deploy & watch -->
+            <rect class="ld-card" x="90" y="300" width="190" height="88" rx="10" />
+            <text class="ld-eyebrow" x="106" y="324">PRODUCTION</text>
+            <text class="ld-idx" x="264" y="324" text-anchor="end">06</text>
+            <text class="ld-title" x="106" y="348">Deploy &amp; Watch</text>
+            <text class="ld-sub" x="106" y="366">Starts small, earns weight;</text>
+            <text class="ld-sub" x="106" y="381">watching restarts the loop.</text>
+            <text class="ld-count" x="185" y="408" text-anchor="middle">45 signals live · one book</text>
+
+            <!-- second-order loop -->
+            <rect class="ld-data" x="830" y="120" width="260" height="88" rx="10" />
+            <text class="ld-eyebrow" x="846" y="144">SECOND-ORDER LOOP</text>
+            <text class="ld-sub" x="846" y="164">The loop improves the loop:</text>
+            <text class="ld-sub" x="846" y="179">playbooks and protocols are</text>
+            <text class="ld-sub" x="846" y="194">themselves experiments.</text>
+
+            <!-- self-expanding data layer -->
+            <rect class="ld-data" x="830" y="300" width="260" height="88" rx="10" />
+            <text class="ld-eyebrow" x="846" y="324">SELF-EXPANDING DATA LAYER</text>
+            <text class="ld-sub" x="846" y="344">Missing data? Agents probe the</text>
+            <text class="ld-sub" x="846" y="359">vendor, prove PIT correctness,</text>
+            <text class="ld-sub" x="846" y="374">backfilled to 2010, mid-run.</text>
+
+            <!-- institutional memory -->
+            <rect class="ld-data" x="90" y="470" width="1000" height="70" rx="10" />
+            <text class="ld-eyebrow" x="106" y="494">INSTITUTIONAL MEMORY</text>
+            <text class="ld-sub" x="106" y="512">Every hypothesis ever tried, kept and queryable.</text>
+            <text class="ld-sub" x="106" y="527">Rejects hibernate with revisit tripwires and wake when the world changes.</text>
+          </svg>
+          </div>
+        </figure>
       </section>
 
       <section id="approach" class="section section--approach" data-section="approach">
@@ -163,10 +325,10 @@
               <h3 class="flow__title">Universe</h3>
               <p class="flow__lead">Point-in-time by construction.</p>
               <p class="flow__text">
-                The investable universe is rebuilt for every historical date
-                from delisting records, so the backtest never sees a name the
-                live book couldn't have traded. Survivorship discipline is
-                enforced in code, not promised.
+                The investable universe is rebuilt for every historical
+                date, delisted names included, so the backtest never sees a
+                company the live book couldn't have traded. About 2,500
+                tradable names on a typical day, sixteen years deep.
               </p>
               <p class="flow__io"><span class="flow__io-arrow" aria-hidden="true">&rarr;</span> point-in-time universe</p>
             </div>
@@ -177,16 +339,18 @@
             <div class="flow__body">
               <p class="flow__index">02</p>
               <h3 class="flow__title">Alpha Research</h3>
-              <p class="flow__lead">42 signals in production.</p>
+              <p class="flow__lead">45 signals in production.</p>
               <p class="flow__text">
-                A research pipeline ingests price, fundamental, event, and
-                news data and produces cross-sectional rankings of the
-                universe. Fundamentals enter as first reported and news as it
-                arrived, never as later revised. Signal families span value, momentum, quality,
-                capital discipline, defensive, reversal, liquidity,
-                post-earnings drift, and sentiment. Every candidate has to
-                clear an orthogonality and decay-resistance bar before it
-                earns a weight in the live book.
+                Research pods work price, fundamental, event, analyst, and
+                news data into cross-sectional rankings of the universe.
+                Fundamentals enter as first filed and news as it arrived,
+                never as later revised. The newest layer is interaction
+                alpha: momentum confirmed by an earnings surprise, surprise
+                confirmed by cash profitability, reversal that skips
+                announcement windows. In testing, these conditioned signals
+                held up where naive combinations failed. Candidates clear
+                durability gates across three market regimes before they
+                earn a weight.
               </p>
               <p class="flow__io"><span class="flow__io-arrow" aria-hidden="true">&rarr;</span> cross-sectional alpha ranks</p>
             </div>
@@ -196,19 +360,20 @@
             <div class="flow__rail" aria-hidden="true"><span class="flow__node"></span></div>
             <div class="flow__body">
               <p class="flow__index">03</p>
-              <h3 class="flow__title">Macro Regime</h3>
-              <p class="flow__lead">Regime-conditioned sector and factor rotation.</p>
+              <h3 class="flow__title">Machine-Learning Overlay</h3>
+              <p class="flow__lead">Two horizon models, one unified score.</p>
               <p class="flow__text">
-                A regime classifier across volatility state, yield-curve
-                shape, growth/inflation quadrant, and breadth maps the
-                current market to a weighting overlay. Momentum, defensive,
-                value, and reversal families lean in or out of the book as
-                the regime shifts, and sector exposures rotate with them,
-                rather than being statically blended. The overlay clears the
-                same holdout and decay gates as any signal before it touches
-                live weights.
+                Gradient-boosted models blend the signal panel into a
+                unified alpha score at two- and three-week horizons. Every
+                model is trained under a pre-registered protocol: features,
+                folds, and acceptance gates are frozen before training
+                starts, and every trial lands in a permanent ledger. The
+                overfitting math never gets to forget an experiment. Refits are
+                walk-forward with purge and embargo against leakage. In
+                live serving, the overlay abstains rather than guesses when
+                its inputs drift.
               </p>
-              <p class="flow__io"><span class="flow__io-arrow" aria-hidden="true">&rarr;</span> regime overlay · sector tilts</p>
+              <p class="flow__io"><span class="flow__io-arrow" aria-hidden="true">&rarr;</span> unified alpha score</p>
             </div>
           </li>
 
@@ -217,15 +382,20 @@
             <div class="flow__body">
               <p class="flow__index">04</p>
               <h3 class="flow__title">Factor Risk Model</h3>
-              <p class="flow__lead">Five structural factors.</p>
+              <p class="flow__lead">Barra-grade, estimated daily.</p>
               <p class="flow__text">
-                Market, size, value, profitability, and investment exposures
-                are estimated with rolling regression. Raw signals are
-                winsorized, z-scored within sector, and residualized against
-                the factor structure, leaving an expected-return vector the
-                factor model can't explain. The same factor covariance
-                enters the optimizer's objective directly, with shrinkage on
-                residual variance.
+                A cross-sectional factor model in the USE4 tradition:
+                market, seven styles (size, value, momentum, leverage,
+                residual volatility, beta, quality), and industries,
+                re-estimated every trading day. The covariance corrects for
+                the ways risk models actually fail: serial correlation in
+                factor returns, the optimizer's habit of betting hardest on
+                the least-well-estimated directions, and volatility regimes
+                that move faster than a trailing window. Signals are
+                winsorized, z-scored within sector, and residualized
+                against this structure. What survives is return the factor
+                model can't explain, and that residual is what the book
+                bets on.
               </p>
               <p class="flow__io"><span class="flow__io-arrow" aria-hidden="true">&rarr;</span> residual alpha · factor covariance</p>
             </div>
@@ -236,15 +406,19 @@
             <div class="flow__body">
               <p class="flow__index">05</p>
               <h3 class="flow__title">Portfolio Optimizer</h3>
-              <p class="flow__lead">Constrained mean-variance.</p>
+              <p class="flow__lead">Constrained conic QP.</p>
               <p class="flow__text">
                 A conic solver maximizes expected return net of risk and
                 transaction cost, subject to long-only, sector, market-cap,
                 single-name, and turnover constraints. Cost and turnover are
                 charged against current holdings, which keeps the trade list
-                stable from one rebalance to the next.
+                stable from one rebalance to the next, and a turnover
+                circuit-breaker sits behind the solve as a second,
+                independent line. Each plan carries a deterministic,
+                content-addressed identifier. Any day's solve replays
+                exactly.
               </p>
-              <p class="flow__io"><span class="flow__io-arrow" aria-hidden="true">&rarr;</span> target weights · trade list</p>
+              <p class="flow__io"><span class="flow__io-arrow" aria-hidden="true">&rarr;</span> target weights · rebalance plan</p>
             </div>
           </li>
 
@@ -253,15 +427,17 @@
             <div class="flow__body">
               <p class="flow__index">06</p>
               <h3 class="flow__title">Execution</h3>
-              <p class="flow__lead">Scheduled against the cost model.</p>
+              <p class="flow__lead">Every order knows its urgency.</p>
               <p class="flow__text">
-                A scheduling layer slices parent orders across the day
-                against a spread-and-impact model, with participation caps
-                and child-order placement tuned to liquidity and to the
-                broker's observed fill behavior. Post-trade
-                TCA feeds realized costs back into the optimizer's
-                transaction-cost term, so the cost curve the book trades
-                against reflects what it has actually been paying.
+                Each trade in the plan carries an urgency score built from
+                alpha decay, risk reduction, and drift, then damped by
+                liquidity. The score maps to a schedule: patient limit
+                orders where the edge is slow, immediate marketable orders
+                where it is dying. Target price bands and participation
+                caps come from a spread-and-impact cost model, and
+                post-trade TCA feeds realized costs back into the
+                optimizer, and the cost curve the book trades against ends
+                up reflecting what it actually pays.
               </p>
               <p class="flow__io"><span class="flow__io-arrow" aria-hidden="true">&rarr;</span> fills · realized cost</p>
             </div>
@@ -272,13 +448,16 @@
       <section id="library" class="section section--library" data-section="library">
         <header class="section__header">
           <p class="section__eyebrow">Research Library</p>
-          <h2 class="section__title">Fifteen signal families.</h2>
+          <h2 class="section__title">Thirteen signal families.</h2>
           <p class="section__kicker">
             Each family is owned by a research pod that works it for new
-            signals against the platform's backtester and historical archive.
-            More candidates means more accidental discoveries, which is
-            exactly why the validation gates sit outside the pod: a candidate
-            stays on the bench until it clears them.
+            signals against the platform's backtester and sixteen years of
+            point-in-time history. Published anomalies are assumed to be
+            decaying from the day they were published, and get haircut
+            accordingly. More candidates means more accidental discoveries,
+            which is exactly why validation sits outside the pod. A
+            candidate stays on the bench until the referee says it clears,
+            and the referee is never its author.
           </p>
         </header>
 
@@ -287,46 +466,165 @@
         <footer class="library__footer">
           <span class="library__count" data-library-count></span>
           <span class="library__note">
-            A new signal, cost model, or constraint is a configuration
-            change, not a code change on the trading-critical path.
+            The zero is deliberate. A family that keeps testing dead stays
+            on the board, where nobody can quietly retry it.
           </span>
         </footer>
       </section>
 
-      <section id="principles" class="section section--principles" data-section="principles">
+      <section id="data" class="section section--data" data-section="data">
         <header class="section__header">
-          <p class="section__eyebrow">Principles</p>
-          <h2 class="section__title">Feedback at every layer.</h2>
+          <p class="section__eyebrow">Data</p>
+          <h2 class="section__title">Grown, not bought.</h2>
           <p class="section__kicker">
-            Signals, costs, configurations, and the platform code itself all
-            sit on feedback loops. As the underlying models improve the loops
-            close faster, and every team inherits each new model generation
-            as soon as it passes the platform's own evaluation harness. What
-            reaches the book still clears the gates.
+            When research asks for data that doesn't exist, the platform
+            builds it mid-investigation, and every new dataset proves it
+            can't see the future before it lands. Most asks are answered
+            from the catalog in seconds. What follows is the morning when
+            the answer is no:
+          </p>
+        </header>
+
+        <figure class="loop-figure" data-reveal>
+          <div class="loop-figure__scroll">
+          <svg viewBox="0 0 1180 462" role="img" aria-labelledby="data-title data-desc">
+            <title id="data-title">One dataset onboarding, request to serving</title>
+            <desc id="data-desc">
+              A swimlane diagram of one autonomous data onboarding, crossing
+              four subsystems. The research pod asks in plain English at
+              9:04 and keeps working. The MCP front door, which holds only
+              read-only credentials, searches the catalog at 9:05 and probes
+              the vendor for a sample and schema at 9:07. The onboarding
+              worker, a privileged and isolated subsystem, writes the
+              onboarding code at 9:12 and runs the gate at 9:31: a
+              point-in-time proof that the data is visible the day it
+              became knowable and invisible the day before, plus an
+              adversarial skeptic panel. The lake backfills history to 2010
+              at 11:46, and at 13:58 the dataset is served point-in-time
+              from the catalog and the pod's backtest resumes. One morning,
+              gate-governed, no human in the path.
+            </desc>
+
+            <defs>
+              <marker id="ldt-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0 0.5 L7.5 4 L0 7.5 Z" class="ld-arrowhead" />
+              </marker>
+            </defs>
+
+            <!-- timestamps -->
+            <text class="ld-count" x="230" y="40" text-anchor="middle">09:04</text>
+            <text class="ld-count" x="370" y="40" text-anchor="middle">09:05</text>
+            <text class="ld-count" x="510" y="40" text-anchor="middle">09:07</text>
+            <text class="ld-count" x="650" y="40" text-anchor="middle">09:12</text>
+            <text class="ld-count" x="790" y="40" text-anchor="middle">09:31</text>
+            <text class="ld-count" x="930" y="40" text-anchor="middle">11:46</text>
+            <text class="ld-count" x="1070" y="40" text-anchor="middle">13:58</text>
+
+            <!-- lanes -->
+            <rect class="ld-data" x="60" y="58" width="1070" height="80" rx="10" />
+            <text class="ld-eyebrow" x="76" y="92">RESEARCH POD</text>
+            <text class="ld-sub" x="76" y="110">asks; keeps working.</text>
+
+            <rect class="ld-data" x="60" y="148" width="1070" height="80" rx="10" />
+            <text class="ld-eyebrow" x="76" y="182">MCP FRONT DOOR</text>
+            <text class="ld-sub" x="76" y="200">read-only credentials.</text>
+
+            <rect class="ld-gate" x="60" y="238" width="1070" height="80" rx="10" />
+            <text class="ld-eyebrow" x="76" y="272">ONBOARDING WORKER</text>
+            <text class="ld-sub" x="76" y="290">privileged · isolated.</text>
+
+            <rect class="ld-data" x="60" y="328" width="1070" height="80" rx="10" />
+            <text class="ld-eyebrow" x="76" y="362">LAKE + HDS</text>
+            <text class="ld-sub" x="76" y="380">point-in-time serving.</text>
+
+            <!-- path: ask → search → probe → generate → gate → backfill → serve → resume -->
+            <path class="ld-line" d="M242 98 H300 V188 H354" marker-end="url(#ldt-arrow)" />
+            <line class="ld-line" x1="382" y1="188" x2="498" y2="188" marker-end="url(#ldt-arrow)" />
+            <path class="ld-line" d="M522 188 H580 V278 H636" marker-end="url(#ldt-arrow)" />
+            <line class="ld-line" x1="662" y1="278" x2="776" y2="278" marker-end="url(#ldt-arrow)" />
+            <path class="ld-line" d="M802 278 H866 V368 H910" marker-end="url(#ldt-arrow)" />
+            <line class="ld-line" x1="942" y1="368" x2="1056" y2="368" marker-end="url(#ldt-arrow)" />
+            <path class="ld-line" d="M1082 368 H1110 V98 H1082" marker-end="url(#ldt-arrow)" />
+            <text class="ld-sub" x="1066" y="102" text-anchor="end">the backtest resumes.</text>
+
+            <!-- nodes -->
+            <circle class="ld-node" cx="230" cy="98" r="5" />
+            <text class="ld-title" x="230" y="82" text-anchor="middle">Ask</text>
+            <text class="ld-sub" x="230" y="124" text-anchor="middle">in plain English.</text>
+
+            <circle class="ld-node" cx="370" cy="188" r="5" />
+            <text class="ld-title" x="370" y="172" text-anchor="middle">Search</text>
+            <text class="ld-sub" x="370" y="214" text-anchor="middle">the catalog usually has it.</text>
+
+            <circle class="ld-node" cx="510" cy="188" r="5" />
+            <text class="ld-title" x="510" y="172" text-anchor="middle">Probe</text>
+            <text class="ld-sub" x="510" y="214" text-anchor="middle">vendor sample + schema.</text>
+
+            <circle class="ld-node" cx="650" cy="278" r="5" />
+            <text class="ld-title" x="650" y="262" text-anchor="middle">Generate</text>
+            <text class="ld-sub" x="650" y="304" text-anchor="middle">onboarding code written.</text>
+
+            <circle class="ld-node ld-node--gate" cx="790" cy="278" r="6" />
+            <text class="ld-title" x="790" y="262" text-anchor="middle">Gate</text>
+            <text class="ld-sub" x="790" y="304" text-anchor="middle">PIT proof · skeptic panel.</text>
+
+            <circle class="ld-node" cx="930" cy="368" r="5" />
+            <text class="ld-title" x="930" y="352" text-anchor="middle">Backfill</text>
+            <text class="ld-sub" x="930" y="394" text-anchor="middle">history to 2010.</text>
+
+            <circle class="ld-node" cx="1070" cy="368" r="5" />
+            <text class="ld-title" x="1070" y="352" text-anchor="middle">Serve</text>
+            <text class="ld-sub" x="1070" y="394" text-anchor="middle">live in the catalog.</text>
+
+            <!-- elapsed bracket -->
+            <line class="ld-line ld-line--soft" x1="230" y1="424" x2="1070" y2="424" />
+            <line class="ld-line" x1="230" y1="419" x2="230" y2="429" />
+            <line class="ld-line" x1="1070" y1="419" x2="1070" y2="429" />
+            <text class="ld-count" x="650" y="448" text-anchor="middle">one morning · gate-governed · no human in the path</text>
+          </svg>
+          </div>
+          <figcaption class="loop-caption">
+            The lake holds 74 datasets backfilled to 2010: vendor feeds,
+            reference tables, risk factors, and the 45 derived signals the
+            book trades on. Scout agents keep it growing against the book's
+            coverage gaps, and datasets that stop earning are retired.
+          </figcaption>
+        </figure>
+      </section>
+
+      <section id="trust" class="section section--trust" data-section="trust">
+        <header class="section__header">
+          <p class="section__eyebrow">Verification</p>
+          <h2 class="section__title">How results earn trust.</h2>
+          <p class="section__kicker">
+            The platform assumes every result might be wrong until
+            machinery says otherwise. A standing red team attacks each
+            candidate before trial, and the verdict comes from checks its
+            authors cannot touch.
           </p>
         </header>
 
         <div class="principles">
           <article class="principle" data-reveal>
-            <h3 class="principle__title">Signals are scored against forward returns.</h3>
+            <h3 class="principle__title">Untrusted code, trusted verdicts.</h3>
             <p class="principle__text">
-              Every cached signal is evaluated daily on its information
-              coefficient over the prediction horizon, so decay gets flagged
-              early. The machine-learning overlay refits on a walk-forward
-              schedule with an embargo against leakage, and each evaluation
-              cycle adds new hypotheses to the cache while reweighting the
-              old ones.
+              Agent-written signal code runs in a fail-closed sandbox: no
+              network, no filesystem, no credentials. Only numbers cross
+              the boundary. The platform recomputes every statistic itself
+              and signs the verdict with a key the agents don't hold, so no
+              agent can mint its own acceptance.
             </p>
           </article>
 
           <article class="principle" data-reveal>
-            <h3 class="principle__title">The stack is assembled from configuration.</h3>
+            <h3 class="principle__title">Negative results are archival.</h3>
             <p class="principle__text">
-              The factor model, exposure estimator, covariance assembler,
-              constraint set, and cost model are all hot-swappable from
-              configuration. Backtest-replay tooling lets the pods run
-              counterfactual configurations against history and see which
-              choices actually move attribution.
+              Each investigation ends in a findings memo whose verdict is
+              set by the scorer, never the author, and a row in a research
+              log where rejects are first-class. When deeper history exposed
+              a shipped signal as a small-sample artifact, it was deleted
+              from production the same week. The no's are written down so
+              they stay dead.
             </p>
           </article>
 
@@ -335,9 +633,9 @@
             <p class="principle__text">
               The linear and square-root impact coefficients in the cost model
               are fitted to the platform's own broker fills and refitted as
-              trade history accumulates, so slippage assumptions track what
-              the book pays to trade. The same fills drive the post-trade TCA
-              that order scheduling is tuned against.
+              trade history accumulates. Slippage assumptions track what the
+              book actually pays to trade, and the same fills drive the
+              post-trade TCA that order scheduling is tuned against.
             </p>
           </article>
 
@@ -352,6 +650,20 @@
             </p>
           </article>
         </div>
+
+        <figure class="exhibit" data-reveal>
+          <figcaption class="exhibit__title">EXHIBIT A · FROM THE RESEARCH LOG</figcaption>
+          <dl class="spec">
+            <div><dt>signal</dt><dd>insider_grade_consensus</dd></div>
+            <div><dt>family</dt><dd>Analyst &amp; Sentiment</dd></div>
+            <div><dt>lifecycle</dt><dd>shipped June 2026 · retired July 2026</dd></div>
+            <div><dt>research read</dt><dd>IC t-stat 3.04, on a 77-name subset</dd></div>
+            <div><dt>full history</dt><dd>IC t-stat 0.12 · durable in 0 of 3 regimes</dd></div>
+            <div><dt>disposition</dt><dd><span class="spec__flag">small-sample artifact · rejected</span></dd></div>
+            <div><dt>action</dt><dd>deleted from production · 1,647 partitions dropped</dd></div>
+            <div><dt>verdict</dt><dd>recomputed from pinned inputs · machine-signed</dd></div>
+          </dl>
+        </figure>
       </section>
 
       <section id="controls" class="section section--controls" data-section="controls">
@@ -379,59 +691,40 @@
           <div class="controls__row" data-reveal>
             <dt class="controls__term">Hard constraints</dt>
             <dd class="controls__def">
-              Sector, market-cap, single-name, and turnover limits enter the
-              optimizer as constraints, not post-trade checks. A book that
-              violates them can't come out of the solve.
-            </dd>
-          </div>
-
-          <div class="controls__row" data-reveal>
-            <dt class="controls__term">Capacity</dt>
-            <dd class="controls__def">
-              The same limits set the book's liquidity footprint: position
-              sizes and turnover are bounded by what the cost model says can
-              be traded without moving prices.
+              Single names are capped at 5% of the book; one-way turnover
+              is capped at 30% per rebalance, a ceiling the cost penalty
+              keeps the book well under. Sector and market-cap bounds sit
+              beside them, and all of these are constraints inside the
+              solve itself, so a book that violates them can never come out
+              of it. The same limits bound the book's liquidity footprint
+              to what the cost model says can trade without moving prices.
             </dd>
           </div>
 
           <div class="controls__row" data-reveal>
             <dt class="controls__term">Validation gates</dt>
             <dd class="controls__def">
-              A signal gets live weight only after clearing an
-              information-coefficient bar on a holdout window, an
-              orthogonality screen against the existing library, and a decay
-              test. The gates recompute every result from pinned inputs
-              rather than trusting the pod's own numbers, and the holdout
-              rolls forward so nothing can be tuned to it. The gates are the
-              same whether the change came from an agent or a human.
-            </dd>
-          </div>
-
-          <div class="controls__row" data-reveal>
-            <dt class="controls__term">Reconciliation</dt>
-            <dd class="controls__def">
-              Holdings are reconciled against the broker before every
-              rebalance, with a repair routine for fills that missed, so the
-              optimizer always starts from the positions that actually exist.
+              A signal gets live weight only after clearing combinatorial
+              purged cross-validation (folds cut so nothing bleeds back
+              from the future), a deflated Sharpe bar (which rises with
+              every experiment run against the data), a ceiling on the
+              probability of backtest overfitting, and tripwires that plant
+              bait to catch look-ahead. The numbers are net of costs, with
+              commission and impact charged before anything is judged.
+              Results are recomputed from pinned inputs in a sandbox the
+              author can't touch, and the gates are the same for agents and
+              humans.
             </dd>
           </div>
 
           <div class="controls__row" data-reveal>
             <dt class="controls__term">Fail-safe</dt>
             <dd class="controls__def">
-              A rebalance that can't reconcile holdings, validate its inputs,
-              or complete the solve doesn't trade; the book holds its last
-              valid positions. The human principals can halt the book at any
-              time.
-            </dd>
-          </div>
-
-          <div class="controls__row" data-reveal>
-            <dt class="controls__term">Replayability</dt>
-            <dd class="controls__def">
-              The live path and the backtest are the same code, so any day's
-              decisions replay exactly from pinned inputs. Deterministic order
-              identifiers keep every trade attributable end to end.
+              Holdings are reconciled against the broker before every
+              rebalance, and any day's decisions replay exactly from pinned
+              inputs. A rebalance that can't reconcile, validate, or solve
+              doesn't trade; the book holds its last valid positions. The
+              human principals can halt the book at any time.
             </dd>
           </div>
         </dl>
@@ -442,12 +735,139 @@
           <p class="section__eyebrow">Stack</p>
           <h2 class="section__title">Boring on purpose.</h2>
           <p class="section__kicker">
-            The interesting risks belong in the research, not the plumbing,
-            so components are picked for determinism and auditability first
-            and speed second. The heavy intelligence lives in the research
-            layer, not in the models that trade.
+            The interesting risks belong in the research. The parts that
+            touch money are chosen for determinism and auditability first,
+            speed second, and the heavy intelligence stays upstream in the
+            research layer.
           </p>
         </header>
+
+        <figure class="loop-figure" data-reveal>
+          <div class="loop-figure__scroll">
+          <svg viewBox="0 0 1180 570" role="img" aria-labelledby="arch-title arch-desc">
+            <title id="arch-title">Polyvaria subsystem architecture</title>
+            <desc id="arch-desc">
+              Four bands. On top, human governance: mandate, risk budgets,
+              gate thresholds, and the halt. Below it, the research floor of
+              agents: the PI agent funding mandates by evidence, research
+              pods turning hypotheses into signals with data on demand, and
+              subsystem teams owning risk, data, and execution end to end.
+              Between the floor and production runs the validation gate: CPCV,
+              deflated Sharpe, PBO, leakage tripwires, machine-signed
+              verdicts — the only door from the floor to the book. Below it,
+              the deterministic production line: the signal library feeds the
+              ML alpha blend, then the portfolio optimizer, then execution,
+              ending in one book. The optimizer also takes the factor
+              covariance from the risk service and the cost curve from the
+              trade cost model, and the signal library publishes into the
+              data service. Human governance touches only the PI agent,
+              which directs the research pods. At the base, the shared
+              foundation both worlds run on: the point-in-time historical
+              data service with its MCP front door, the backtesting service
+              acting as referee with signed verdicts, the factor risk
+              service publishing its risk model daily, the trade cost model
+              fitted to the platform's own fills, and the orchestrator —
+              agents decide, it schedules.
+            </desc>
+
+            <defs>
+              <marker id="lda-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0 0.5 L7.5 4 L0 7.5 Z" class="ld-arrowhead" />
+              </marker>
+            </defs>
+
+            <!-- governance -->
+            <rect class="ld-data" x="90" y="30" width="1000" height="42" rx="10" />
+            <text class="ld-eyebrow" x="106" y="48">HUMAN GOVERNANCE</text>
+            <text class="ld-sub" x="106" y="63">Mandate · risk budgets · gate thresholds · the halt</text>
+
+            <line class="ld-line ld-line--soft" x1="250" y1="72" x2="250" y2="100" marker-end="url(#lda-arrow)" />
+
+            <!-- research floor -->
+            <text class="ld-idx" x="90" y="98">RESEARCH FLOOR</text>
+            <rect class="ld-card" x="90" y="104" width="320" height="74" rx="10" />
+            <text class="ld-title" x="106" y="134">PI Agent</text>
+            <text class="ld-sub" x="106" y="156">Funds mandates by evidence; retires stalled lines.</text>
+
+            <line class="ld-line" x1="410" y1="141" x2="424" y2="141" marker-end="url(#lda-arrow)" />
+
+            <rect class="ld-card" x="430" y="104" width="320" height="74" rx="10" />
+            <text class="ld-title" x="446" y="134">Research Pods</text>
+            <text class="ld-sub" x="446" y="156">Hypotheses become signals, data on demand.</text>
+
+            <rect class="ld-card" x="770" y="104" width="320" height="74" rx="10" />
+            <text class="ld-title" x="786" y="134">Subsystem Teams</text>
+            <text class="ld-sub" x="786" y="156">Risk, data, execution: agent-owned end to end.</text>
+
+            <!-- everything crosses the validation gate -->
+            <line class="ld-line" x1="250" y1="178" x2="250" y2="202" marker-end="url(#lda-arrow)" />
+            <line class="ld-line" x1="590" y1="178" x2="590" y2="202" marker-end="url(#lda-arrow)" />
+            <line class="ld-line" x1="930" y1="178" x2="930" y2="202" marker-end="url(#lda-arrow)" />
+
+            <rect class="ld-gate" x="90" y="206" width="1000" height="52" rx="10" />
+            <text class="ld-eyebrow" x="590" y="228" text-anchor="middle">THE VALIDATION GATE</text>
+            <text class="ld-sub" x="590" y="246" text-anchor="middle">CPCV · deflated Sharpe · PBO · leakage tripwires · machine-signed verdicts. The only door from the floor to the book.</text>
+
+            <line class="ld-line" x1="250" y1="258" x2="250" y2="286" marker-end="url(#lda-arrow)" />
+            <line class="ld-line" x1="590" y1="258" x2="590" y2="286" marker-end="url(#lda-arrow)" />
+            <line class="ld-line" x1="930" y1="258" x2="930" y2="286" marker-end="url(#lda-arrow)" />
+
+            <!-- production line -->
+            <text class="ld-idx" x="90" y="282">PRODUCTION LINE</text>
+            <rect class="ld-card" x="90" y="290" width="200" height="74" rx="10" />
+            <text class="ld-title" x="106" y="320">Signal Library</text>
+            <text class="ld-sub" x="106" y="344">45 signals, published daily.</text>
+
+            <rect class="ld-card" x="330" y="290" width="200" height="74" rx="10" />
+            <text class="ld-title" x="346" y="320">ML Alpha Blend</text>
+            <text class="ld-sub" x="346" y="344">Two horizons, one score.</text>
+
+            <rect class="ld-card" x="570" y="290" width="200" height="74" rx="10" />
+            <text class="ld-title" x="586" y="320">Portfolio Optimizer</text>
+            <text class="ld-sub" x="586" y="344">Conic QP, hard constraints.</text>
+
+            <rect class="ld-card" x="810" y="290" width="200" height="74" rx="10" />
+            <text class="ld-title" x="826" y="320">Execution</text>
+            <text class="ld-sub" x="826" y="344">Urgency-tiered, cost-aware.</text>
+
+            <line class="ld-line" x1="290" y1="327" x2="324" y2="327" marker-end="url(#lda-arrow)" />
+            <line class="ld-line" x1="530" y1="327" x2="564" y2="327" marker-end="url(#lda-arrow)" />
+            <line class="ld-line" x1="770" y1="327" x2="804" y2="327" marker-end="url(#lda-arrow)" />
+            <line class="ld-line" x1="1010" y1="327" x2="1056" y2="327" marker-end="url(#lda-arrow)" />
+            <text class="ld-count" x="1062" y="331">one book</text>
+
+            <!-- optimizer feeds + library publishing -->
+            <line class="ld-line" x1="190" y1="364" x2="190" y2="466" marker-end="url(#lda-arrow)" />
+            <text class="ld-flowlabel" x="198" y="424">publishes</text>
+            <line class="ld-line" x1="590" y1="470" x2="590" y2="370" marker-end="url(#lda-arrow)" />
+            <text class="ld-flowlabel" x="582" y="424" text-anchor="end">covariance</text>
+            <path class="ld-line" d="M792 470 V400 H720 V370" marker-end="url(#lda-arrow)" />
+            <text class="ld-flowlabel" x="756" y="392" text-anchor="middle">cost curve</text>
+
+            <!-- shared foundation -->
+            <text class="ld-idx" x="90" y="462">SHARED FOUNDATION</text>
+            <rect class="ld-data" x="90" y="470" width="192" height="74" rx="10" />
+            <text class="ld-title" x="106" y="500">HDS Data Service</text>
+            <text class="ld-sub" x="106" y="524">As-of reads · MCP front door.</text>
+
+            <rect class="ld-data" x="292" y="470" width="192" height="74" rx="10" />
+            <text class="ld-title" x="308" y="500">Backtesting Service</text>
+            <text class="ld-sub" x="308" y="524">The referee. Signed verdicts.</text>
+
+            <rect class="ld-data" x="494" y="470" width="192" height="74" rx="10" />
+            <text class="ld-title" x="510" y="500">Factor Risk Service</text>
+            <text class="ld-sub" x="510" y="524">Risk model published daily.</text>
+
+            <rect class="ld-data" x="696" y="470" width="192" height="74" rx="10" />
+            <text class="ld-title" x="712" y="500">Trade Cost Model</text>
+            <text class="ld-sub" x="712" y="524">Spread &amp; impact, from fills.</text>
+
+            <rect class="ld-data" x="898" y="470" width="192" height="74" rx="10" />
+            <text class="ld-title" x="914" y="500">Orchestrator</text>
+            <text class="ld-sub" x="914" y="524">Agents decide; it schedules.</text>
+          </svg>
+          </div>
+        </figure>
 
         <dl class="stack" data-reveal>
           <div class="stack__row">
@@ -468,17 +888,46 @@
           </div>
           <div class="stack__row">
             <dt class="stack__term">Risk</dt>
-            <dd class="stack__def">Fama-French five-factor with rolling exposures and structured covariance. Deliberately conventional; the differentiated work is what gets residualized against it.</dd>
+            <dd class="stack__def">Barra-grade multi-factor model in the USE4 tradition: market, seven styles, and industry factors, with Newey-West, eigenfactor, and volatility-regime adjustments. The differentiated work is what gets residualized against it.</dd>
           </div>
           <div class="stack__row">
             <dt class="stack__term">Machine learning</dt>
-            <dd class="stack__def">Gradient-boosted trees over a 40-feature panel, walk-forward refit.</dd>
+            <dd class="stack__def">XGBoost over an evidence-curated feature panel; two horizon models, walk-forward refit under purged combinatorial cross-validation.</dd>
+          </div>
+          <div class="stack__row">
+            <dt class="stack__term">Verification</dt>
+            <dd class="stack__def">Fail-closed kernel sandboxing for agent code; every verdict recomputed from pinned inputs and signed.</dd>
           </div>
           <div class="stack__row">
             <dt class="stack__term">Execution</dt>
-            <dd class="stack__def">Deterministic order identifiers; broker reconciliation before every rebalance.</dd>
+            <dd class="stack__def">Urgency-tiered order scheduling against a spread-and-impact model; deterministic plan identifiers; broker reconciliation before every rebalance.</dd>
           </div>
         </dl>
+
+        <details class="appendix">
+          <summary>Methods appendix: the actual thresholds</summary>
+          <dl class="spec">
+            <div><dt>cross-validation</dt><dd>combinatorial purged CV, C(6,2) = 15 splits · purge ≥ 21 bars · embargo 10 bars</dd></div>
+            <div><dt>acceptance</dt><dd>deflated Sharpe probability ≥ 0.95 · probability of backtest overfitting ≤ 0.5</dd></div>
+            <div><dt>scoring costs</dt><dd>1 bp commission · next-open fills, one-bar lag · impact charged before judgment</dd></div>
+            <div><dt>leakage tripwires</dt><dd>future-invariance · planted canary · measured lookback</dd></div>
+            <div><dt>durability screen</dt><dd>same-sign IC, |t| &gt; 1 in each regime: 2012–16 · 2017–21 · 2022–26</dd></div>
+            <div><dt>sandbox</dt><dd>no network, read-only root, cleared environment, capabilities dropped · 4 GB / 1,200 CPU-second caps</dd></div>
+            <div><dt>verdicts</dt><dd>ECDSA P-256 signatures binding signal code, config, and data snapshot hashes</dd></div>
+            <div><dt>numeric oracle</dt><dd>agreement within rtol 1e-9 against an independent implementation</dd></div>
+            <div><dt>skeptic panel</dt><dd>three adversarial verifiers, five on dissent · uncertainty defaults to reject</dd></div>
+            <div><dt>onboarding dry run</dt><dd>512 MB memory ceiling proven before any backfill</dd></div>
+            <div><dt>ml overlay</dt><dd>pre-registered protocol · purge 11–16 days, embargo 10–15 by horizon · walk-forward refit</dd></div>
+            <div><dt>risk model</dt><dd>daily cross-sectional WLS · Newey-West · eigenfactor adjustment · volatility-regime scaling</dd></div>
+          </dl>
+        </details>
+      </section>
+
+      <section id="status" class="section section--status" data-section="status">
+        <p class="status-line">
+          Polyvaria is in active development and trades proprietary capital
+          only. It is not open to outside investment or inquiries.
+        </p>
       </section>
 
     </main>

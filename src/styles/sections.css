@@ -389,9 +389,9 @@
    ────────────────────────────────────────────────────────────── */
 
 /*
-  Column counts are chosen so fifteen tiles always tile the rectangle
-  exactly: 5×3 wide, 3×5 mid. In the 2-up range the Composite family
-  spans the last row — fittingly, it blends the rest.
+  Thirteen family tiles plus empty padding tiles close the rectangle
+  at every width: both empties show at 5-up (2×5 + 3+2) and 3-up
+  (4×3 + 1+2), one at 2-up (13+1 = 7×2), none on phones.
 */
 .library {
   display: grid;
@@ -413,17 +413,31 @@
   .library {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .library > .library-tile:last-child {
-    grid-column: 1 / -1;
-  }
 }
 
 @media (max-width: 480px) {
   .library {
     grid-template-columns: 1fr;
   }
-  .library > .library-tile:last-child {
-    grid-column: auto;
+}
+
+.library-tile--empty:hover {
+  background: var(--ink-2);
+}
+
+.library-tile--empty::after {
+  display: none;
+}
+
+@media (max-width: 880px) {
+  .library-tile--empty:last-child {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .library-tile--empty {
+    display: none;
   }
 }
 
@@ -731,4 +745,228 @@
   line-height: 1.4;
   color: var(--cream-0);
   letter-spacing: var(--tracking-tight);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Research loop diagram
+   ────────────────────────────────────────────────────────────── */
+
+/* Diagram-led sections with long kickers span the full shell width
+   instead of stacking into a tall 56ch column beside empty space. */
+.section--loop .section__header,
+.section--loop .section__kicker,
+.section--data .section__header,
+.section--data .section__kicker {
+  max-width: none;
+}
+
+/* The status coda: one quiet line above the footer. */
+.section--status {
+  padding-top: var(--space-8);
+  padding-bottom: var(--space-8);
+}
+
+.status-line {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.02rem, 1.4vw, 1.2rem);
+  line-height: 1.5;
+  color: var(--cream-2);
+  letter-spacing: var(--tracking-tight);
+}
+
+.status-line::before {
+  content: "";
+  width: 28px;
+  height: 1px;
+  background: var(--copper-1);
+  flex: none;
+}
+
+.loop-figure {
+  margin: 0;
+}
+
+.loop-figure__scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.loop-figure svg {
+  display: block;
+  min-width: 1020px;
+  width: 100%;
+  height: auto;
+}
+
+.loop-caption {
+  display: block;
+  margin-top: var(--space-5);
+  max-width: var(--measure);
+  font-family: var(--font-mono);
+  font-size: var(--t-mono);
+  line-height: 1.7;
+  color: var(--cream-3);
+}
+
+/* diagram marks — same palette as the rest of the page */
+.ld-card { fill: var(--ink-2); stroke: var(--hairline-strong); }
+.ld-gate { fill: var(--ink-3); stroke: rgba(201, 163, 107, 0.35); }
+.ld-data { fill: var(--ink-2); stroke: var(--hairline); }
+
+.ld-eyebrow {
+  fill: var(--copper-1);
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+}
+
+.ld-idx {
+  fill: var(--cream-4);
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+}
+
+.ld-title {
+  fill: var(--cream-1);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.ld-sub { fill: var(--cream-3); font-family: var(--font-sans); font-size: 11px; }
+.ld-tick { fill: var(--cream-2); font-family: var(--font-sans); font-size: 11px; }
+.ld-foot { fill: var(--cream-4); font-family: var(--font-sans); font-size: 10px; }
+.ld-return-label { fill: var(--cream-3); font-family: var(--font-sans); font-size: 11px; }
+
+.ld-count {
+  fill: var(--copper-1);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+}
+
+.ld-flowlabel,
+.ld-reject {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+}
+
+.ld-flowlabel { fill: var(--cream-4); }
+.ld-reject { fill: var(--copper-2); }
+
+.ld-line { stroke: var(--cream-4); stroke-width: 1.25; fill: none; }
+.ld-line--return { stroke: var(--copper-2); stroke-dasharray: 4 5; }
+.ld-line--soft { stroke-dasharray: 4 5; opacity: 0.7; }
+.ld-tickmark { stroke: var(--copper-1); stroke-width: 1.5; }
+
+.ld-arrowhead { fill: var(--cream-4); }
+.ld-arrowhead--copper { fill: var(--copper-2); }
+
+.ld-node { fill: var(--ink-1); stroke: var(--copper-1); stroke-width: 1.5; }
+.ld-node--gate { fill: var(--copper-1); }
+
+/* ──────────────────────────────────────────────────────────────
+   Spec rows (Exhibit A, methods appendix)
+   ────────────────────────────────────────────────────────────── */
+
+.spec {
+  margin: 0;
+  display: grid;
+  gap: var(--space-2);
+}
+
+.spec > div {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  gap: var(--space-4);
+}
+
+@media (max-width: 640px) {
+  .spec > div {
+    grid-template-columns: 1fr;
+    gap: 0.15rem;
+  }
+}
+
+.spec dt {
+  font-family: var(--font-mono);
+  font-size: var(--t-mono);
+  color: var(--cream-4);
+}
+
+.spec dd {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--t-mono);
+  line-height: 1.6;
+  color: var(--cream-1);
+}
+
+.spec .spec__flag {
+  color: var(--copper-1);
+}
+
+.exhibit {
+  margin: var(--space-7) 0 0;
+  max-width: 760px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 12px;
+  background: var(--ink-2);
+  overflow: hidden;
+}
+
+.exhibit__title {
+  margin: 0;
+  padding: var(--space-3) var(--space-5);
+  border-bottom: 1px solid var(--hairline);
+  font-family: var(--font-mono);
+  font-size: var(--t-mono);
+  letter-spacing: var(--tracking-eyebrow);
+  color: var(--copper-1);
+}
+
+.exhibit .spec {
+  padding: var(--space-5);
+}
+
+.appendix {
+  margin-top: var(--space-8);
+  border-top: 1px solid var(--hairline);
+  padding-top: var(--space-5);
+}
+
+.appendix summary {
+  cursor: pointer;
+  width: fit-content;
+  font-family: var(--font-mono);
+  font-size: var(--t-small);
+  letter-spacing: var(--tracking-loose);
+  color: var(--cream-2);
+}
+
+.appendix summary:hover,
+.appendix summary:focus-visible {
+  color: var(--copper-0);
+}
+
+.appendix .spec {
+  margin-top: var(--space-5);
+}
+
+/* ── Loop diagram: dashes flow along the ring ── */
+
+.ld-line--flow {
+  stroke-dasharray: 7 5;
+  animation: ld-flow 1.4s linear infinite;
+}
+
+@keyframes ld-flow {
+  to { stroke-dashoffset: -12; }
 }
