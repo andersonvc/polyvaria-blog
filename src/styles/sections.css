@@ -863,7 +863,7 @@
 
 .ld-line { stroke: var(--cream-4); stroke-width: 1.25; fill: none; }
 .ld-line--return { stroke: var(--copper-2); stroke-dasharray: 4 5; }
-.ld-line--soft { stroke-dasharray: 4 5; opacity: 0.7; }
+.ld-line--soft { stroke-dasharray: 4 5; opacity: 0.55; }
 .ld-tickmark { stroke: var(--copper-1); stroke-width: 1.5; }
 
 .ld-arrowhead { fill: var(--cream-4); }
@@ -963,6 +963,8 @@
 /* ── Loop diagram: dashes flow along the ring ── */
 
 .ld-line--flow {
+  stroke: var(--cream-3);
+  stroke-width: 1.5;
   stroke-dasharray: 7 5;
   animation: ld-flow 1.4s linear infinite;
 }
