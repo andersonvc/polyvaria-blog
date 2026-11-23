@@ -1,0 +1,70 @@
+---
+import "@fontsource/ibm-plex-mono/latin-400.css";
+import "../styles/tokens.css";
+import "../styles/base.css";
+
+import serifDisplay from "../assets/fonts/source-serif-4-display.woff2?url";
+import serifRoman from "../assets/fonts/source-serif-4-text-roman.woff2?url";
+import Masthead from "../components/Masthead.astro";
+import { SITE } from "../content/site";
+
+interface Props {
+  title?: string;
+  description?: string;
+  nav?: boolean;
+}
+
+const { title = `${SITE.title}: ${SITE.headline.replace(/\.$/, "")}`, description = SITE.description, nav = true } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#0b0d12" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/brand/apple-touch-icon.png" />
+    <link rel="preload" href={serifDisplay} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={serifRoman} as="font" type="font/woff2" crossorigin />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={SITE.headline} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="/brand/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script is:inline>
+      document.documentElement.classList.add("js");
+    </script>
+  </head>
+
+  <body>
+    <a class="skip" href="#main">Skip to the page</a>
+    <Masthead nav={nav} />
+    <main id="main">
+      <slot />
+    </main>
+    <script>
+      /* Mark each piece as it comes into view; the styles do the rest. */
+      const targets = document.querySelectorAll<HTMLElement>("[data-reveal]");
+      if ("IntersectionObserver" in window) {
+        const seen = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              entry.target.classList.add("is-in");
+              seen.unobserve(entry.target);
+            }
+          },
+          { threshold: 0.18, rootMargin: "0px 0px -6% 0px" },
+        );
+        targets.forEach((el) => seen.observe(el));
+      } else {
+        targets.forEach((el) => el.classList.add("is-in"));
+      }
+    </script>
+  </body>
+</html>

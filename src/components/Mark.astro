@@ -1,0 +1,48 @@
+---
+/*
+  The mark: a constraint polytope in three-quarter view, the optimal
+  vertex in copper. Geometry is the brand file's (public/brand); only
+  the inks are taken from the page so it follows light and dark.
+*/
+interface Props {
+  size?: number;
+}
+const { size = 26 } = Astro.props;
+---
+
+<svg class="mark" viewBox="0 0 64 64" width={size} height={size} aria-hidden="true">
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path class="mark__face" d="M32 5.5 L56.5 18.5 L53 45 L35.5 31.5 Z"></path>
+    <path class="mark__outline" d="M53 45 L28.5 58.5 L8 44 L11.5 17 L32 5.5"></path>
+    <path class="mark__binding" d="M32 5.5 L56.5 18.5 L53 45"></path>
+    <path class="mark__inner" d="M35.5 31.5 L32 5.5 M35.5 31.5 L53 45 M35.5 31.5 L8 44"></path>
+    <circle class="mark__vertex" cx="56.5" cy="18.5" r="4.4"></circle>
+  </g>
+</svg>
+
+<style>
+  .mark {
+    flex: none;
+    overflow: visible;
+  }
+  .mark__face {
+    fill: var(--copper-wash);
+  }
+  .mark__outline {
+    stroke: var(--copper-mark);
+    stroke-width: 2.2;
+    opacity: 0.62;
+  }
+  .mark__binding {
+    stroke: var(--copper-mark);
+    stroke-width: 2.6;
+  }
+  .mark__inner {
+    stroke: var(--copper-mark);
+    stroke-width: 1.4;
+    opacity: 0.4;
+  }
+  .mark__vertex {
+    fill: var(--copper-mark);
+  }
+</style>

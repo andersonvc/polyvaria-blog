@@ -1,0 +1,183 @@
+---
+/*
+  The research loop as a ring, clockwise from the top. Stations are
+  placed from the data in content/firm.ts; nothing is positioned by
+  hand. Below the width at which its labels stay readable the ring
+  gives way to the same six steps as a list.
+*/
+import { LOOP } from "../content/firm";
+
+const W = 860;
+const H = 640;
+const CX = W / 2;
+const CY = H / 2;
+const R = 178;
+const n = LOOP.length;
+
+const at = (i: number, r: number): [number, number] => {
+  const a = (i / n) * Math.PI * 2;
+  return [CX + r * Math.sin(a), CY - r * Math.cos(a)];
+};
+
+const arcBetween = (i: number) => {
+  const pad = 0.085;
+  const a0 = ((i + pad) / n) * Math.PI * 2;
+  const a1 = ((i + 1 - pad) / n) * Math.PI * 2;
+  const p = (a: number) => `${(CX + R * Math.sin(a)).toFixed(1)} ${(CY - R * Math.cos(a)).toFixed(1)}`;
+  return `M${p(a0)} A${R} ${R} 0 0 1 ${p(a1)}`;
+};
+
+const stations = LOOP.map((step, i) => {
+  const [x, y] = at(i, R);
+  const [lx, ly] = at(i, R + 32);
+  const sin = Math.sin((i / n) * Math.PI * 2);
+  const cos = Math.cos((i / n) * Math.PI * 2);
+  const anchor = Math.abs(sin) < 0.3 ? "middle" : sin > 0 ? "start" : "end";
+  /* labels above the ring grow upward, labels below grow downward */
+  const block = 72;
+  const top = Math.abs(sin) < 0.3 ? (cos > 0 ? ly - block + 8 : ly + 10) : ly - block / 2 + 8;
+  return { step, x, y, lx, top, anchor };
+});
+---
+
+<figure class="loop">
+  <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="loop-title loop-desc">
+    <title id="loop-title">The research loop</title>
+    <desc id="loop-desc">
+      A ring of six steps, read clockwise: sense, allocate, generate, build, verify, deploy. Deploying returns to sensing. At
+      the centre is institutional memory, which every step reads and writes.
+    </desc>
+    <defs>
+      <marker id="loop-tip" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="8" markerHeight="8" orient="auto">
+        <path d="M0.8 0.9 L7 4 L0.8 7.1" fill="none" stroke="context-stroke" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"></path>
+      </marker>
+    </defs>
+
+    {LOOP.map((_, i) => <path class="loop__arc" d={arcBetween(i)} marker-end="url(#loop-tip)" />)}
+
+    {
+      stations.map(({ step, x, y, lx, top, anchor }) => (
+        <g>
+          <circle class:list={["loop__station", { "loop__station--gate": step.name === "Verify" }]} cx={x} cy={y} r="5.5" />
+          <text class="loop__by" x={lx} y={top} text-anchor={anchor}>
+            {step.by}
+          </text>
+          <text class="loop__name" x={lx} y={top + 29} text-anchor={anchor}>
+            {step.name}
+          </text>
+          {step.text.map((line, k) => (
+            <text class="loop__text" x={lx} y={top + 52 + k * 20} text-anchor={anchor}>
+              {line}
+            </text>
+          ))}
+        </g>
+      ))
+    }
+
+    <circle class="loop__memory" cx={CX} cy={CY} r="104"></circle>
+    <text class="loop__by" x={CX} y={CY - 30} text-anchor="middle">Institutional memory</text>
+    <text class="loop__text" x={CX} y={CY - 4} text-anchor="middle">Every hypothesis ever</text>
+    <text class="loop__text" x={CX} y={CY + 16} text-anchor="middle">tried is kept. Rejects wait</text>
+    <text class="loop__text" x={CX} y={CY + 36} text-anchor="middle">with what would reopen</text>
+    <text class="loop__text" x={CX} y={CY + 56} text-anchor="middle">them.</text>
+  </svg>
+
+  <ol class="loop__list">
+    {
+      LOOP.map((step) => (
+        <li>
+          <span class="label">{step.by}</span>
+          <strong>{step.name}</strong>
+          <span>{step.text.join(" ")}</span>
+        </li>
+      ))
+    }
+  </ol>
+</figure>
+
+<style>
+  svg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .loop__arc {
+    fill: none;
+    stroke: var(--ink-2);
+    stroke-width: 1.1;
+    stroke-linecap: round;
+  }
+
+  .loop__station {
+    fill: var(--paper);
+    stroke: var(--ink);
+    stroke-width: 1.4;
+  }
+
+  .loop__station--gate {
+    fill: var(--copper-mark);
+    stroke: var(--copper-mark);
+  }
+
+  .loop__memory {
+    fill: none;
+    stroke: var(--ink-3);
+    stroke-width: 1;
+    stroke-dasharray: 1.5 6;
+    stroke-linecap: round;
+  }
+
+  .loop__by {
+    font-family: var(--serif);
+    font-size: 12.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    fill: var(--ink-3);
+  }
+
+  .loop__name {
+    font-family: var(--display);
+    font-size: 30px;
+    letter-spacing: -0.01em;
+    fill: var(--ink);
+  }
+
+  .loop__text {
+    font-family: var(--serif);
+    font-size: 15.5px;
+    fill: var(--ink-2);
+  }
+
+  .loop__list {
+    display: none;
+  }
+
+  @media (max-width: 52rem) {
+    svg {
+      display: none;
+    }
+
+    .loop__list {
+      display: grid;
+      border-top: 1px solid var(--ink);
+    }
+
+    .loop__list li {
+      display: grid;
+      gap: 0.15rem;
+      padding: 0.9rem 0 1rem;
+      border-bottom: 1px solid var(--rule-faint);
+    }
+
+    .loop__list strong {
+      font-family: var(--display);
+      font-size: var(--step-1);
+      font-weight: 400;
+    }
+
+    .loop__list li > span:last-child {
+      color: var(--ink-2);
+    }
+  }
+</style>

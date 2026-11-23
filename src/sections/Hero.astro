@@ -1,0 +1,199 @@
+---
+import DepartmentField from "../components/DepartmentField.astro";
+
+/* The argument in four steps: the problem, the company, the pod, the scale. Each leads with its hardest line. */
+const PILLARS = [
+  {
+    lead: "The limit on AI systems is organizational complexity.",
+    rest: "Coordinating agent swarms on singular goals with competing sub-objectives drives instability.",
+  },
+  {
+    lead: "Polyvaria solves organizational alignment by design.",
+    rest: "Six self-organizing departments group complementary objectives internally, while structured interfaces balance competing goals across teams.",
+  },
+  {
+    lead: "Polyvaria alpha research behaves like real quant pods.",
+    rest: "PMs set the strategic direction, while each pod runs an AgentFlow pipeline of PI, researcher, and quant-dev nodes.",
+  },
+  {
+    lead: "The organization scales like compute.",
+    rest: "Launching a new pod is a deployment, not a hire. Self-reinforcing departments let thousands of agents run in parallel without compromising organizational structure.",
+  },
+];
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="wrap hero__inner">
+    <div class="hero__text">
+      <h1 id="hero-title">
+        <span>Institutions</span>
+        <span><em>beyond</em> human</span>
+        <span>scale.</span>
+      </h1>
+      <p class="hero__dek">
+        <span>Polyvaria is an autonomous company</span> Our first business is a zero-employee hedge fund trading its own capital today.
+      </p>
+
+      <ul class="hero__pillars">
+        {
+          PILLARS.map((p) => (
+            <li>
+              <strong>{p.lead}</strong>
+              <span>{p.rest}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+
+  <div class="hero__firm">
+    <DepartmentField />
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    display: grid;
+    align-items: center;
+    min-height: calc(100svh - 5.2rem);
+  }
+
+  /* The firm takes the right of the screen, and starts clear of the headline at every width. */
+  .hero__firm {
+    position: absolute;
+    inset: 1rem var(--gutter) 2.5rem max(45%, 30rem);
+  }
+
+  .hero__inner {
+    position: relative;
+    z-index: 2;
+    padding-block: clamp(1.5rem, 3vw, 2.5rem) clamp(2.5rem, 5vw, 4rem);
+    pointer-events: none;
+  }
+
+  .hero__text {
+    max-width: 36rem;
+    pointer-events: auto;
+  }
+
+  /* Beside the figure, the running text keeps to its own side. */
+  @media (min-width: 62.01rem) {
+    .hero__dek,
+    .hero__pillars {
+      max-width: min(33rem, 38vw);
+    }
+  }
+
+  h1 {
+    font-family: var(--display);
+    font-size: var(--step-4);
+    line-height: 0.98;
+    letter-spacing: -0.028em;
+    font-weight: 370;
+  }
+
+  h1 > span {
+    display: block;
+    white-space: nowrap;
+  }
+
+  h1 em {
+    font-style: normal;
+    color: var(--copper);
+  }
+
+  .hero__dek {
+    margin-top: 1.7rem;
+    font-size: clamp(1.15rem, 1.05rem + 0.4vw, 1.36rem);
+    line-height: 1.42;
+    letter-spacing: -0.004em;
+    color: var(--ink-2);
+  }
+
+  .hero__dek span {
+    color: var(--ink);
+  }
+
+  /* The pillars: a copper rule down the left, and one short line each. */
+  .hero__pillars {
+    display: grid;
+    gap: 0.8rem;
+    margin-top: 1.9rem;
+    padding-left: 1.3rem;
+    border-left: 1px solid var(--copper-mark);
+  }
+
+  .hero__pillars li {
+    display: grid;
+    gap: 0.1rem;
+  }
+
+  /* The hard line, then the sentence that carries it. */
+  .hero__pillars strong {
+    font-family: var(--display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(1.08rem, 0.98rem + 0.42vw, 1.26rem);
+    line-height: 1.3;
+    letter-spacing: -0.006em;
+    color: var(--ink);
+  }
+
+  .hero__pillars span {
+    font-size: clamp(0.95rem, 0.9rem + 0.2vw, 1.04rem);
+    line-height: 1.42;
+    color: var(--ink-2);
+    text-wrap: pretty;
+  }
+
+  /* On a short screen the words tighten, so the headline, the pillars and the whole firm fit at once. */
+  @media (min-width: 62.01rem) and (max-height: 64rem) {
+    .hero__inner {
+      padding-block: 0.5rem 2.5rem;
+    }
+
+    h1 {
+      font-size: min(var(--step-4), 9.4vh);
+    }
+
+    .hero__dek {
+      margin-top: 1.1rem;
+      font-size: clamp(1.02rem, 2.3vh, 1.3rem);
+    }
+
+    .hero__pillars {
+      gap: 0.5rem;
+      margin-top: 1.2rem;
+    }
+
+    .hero__pillars strong {
+      font-size: clamp(0.98rem, 2.2vh, 1.18rem);
+    }
+
+    .hero__pillars span {
+      font-size: clamp(0.88rem, 1.85vh, 1rem);
+      line-height: 1.36;
+    }
+  }
+
+  /* On a narrow screen the firm sits under the words. */
+  @media (max-width: 62rem) {
+    .hero {
+      display: block;
+      min-height: 0;
+    }
+
+    .hero__inner {
+      padding-block: 1rem 0;
+    }
+
+    .hero__firm {
+      position: relative;
+      inset: auto;
+      height: clamp(24rem, 104vw, 38rem);
+      margin: 1.5rem var(--gutter) 2rem;
+    }
+  }
+</style>

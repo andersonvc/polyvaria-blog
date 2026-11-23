@@ -1,0 +1,90 @@
+---
+/*
+  A record set as a record: field names in a narrow column, values in
+  monospace, a refusal in red. Used for exhibits quoted from the
+  repositories.
+*/
+interface Row {
+  k: string;
+  v: string;
+  flag?: boolean;
+  note?: string;
+}
+
+interface Props {
+  rows: readonly Row[];
+  annotated?: boolean;
+}
+
+const { rows, annotated = false } = Astro.props;
+---
+
+<dl class:list={["record", { annotated }]}>
+  {
+    rows.map((row) => (
+      <div>
+        <dt>{row.k}</dt>
+        <dd class:list={{ refusal: row.flag }}>{row.v}</dd>
+        {annotated && <dd class="record__note">{row.note}</dd>}
+      </div>
+    ))
+  }
+</dl>
+
+<style>
+  .record {
+    font-family: var(--mono);
+    font-size: var(--step--2);
+    line-height: 1.5;
+    font-variant-numeric: normal;
+  }
+
+  .record > div {
+    display: grid;
+    grid-template-columns: 9.5rem minmax(0, 1fr);
+    column-gap: 1rem;
+    padding: 0.34rem 0;
+    border-top: 1px solid var(--rule-faint);
+  }
+
+  .record > div:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .record.annotated > div {
+    grid-template-columns: 12.5rem 7.5rem minmax(0, 1fr);
+  }
+
+  dt {
+    color: var(--ink-3);
+  }
+
+  dd {
+    color: var(--ink);
+    overflow-wrap: anywhere;
+  }
+
+  dd.refusal {
+    color: var(--red);
+  }
+
+  .record__note {
+    font-family: var(--serif);
+    font-size: var(--step--1);
+    line-height: 1.42;
+    color: var(--ink-2);
+    font-variant-numeric: oldstyle-nums proportional-nums;
+  }
+
+  @media (max-width: 40rem) {
+    .record > div,
+    .record.annotated > div {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .record__note {
+      margin-top: 0.15rem;
+    }
+  }
+</style>

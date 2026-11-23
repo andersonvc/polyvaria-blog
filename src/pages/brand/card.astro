@@ -1,0 +1,110 @@
+---
+/*
+  The share card, as a page. public/brand/og.png is a 2x screenshot of
+  this page at 1200 by 630; public/brand/README.md says how to retake
+  it. Kept as a page so the card is made of the same type, inks and
+  figure as the site and cannot drift from them.
+*/
+import "../../styles/tokens.css";
+import "../../styles/base.css";
+
+import wordmarkFile from "../../../public/brand/polyvaria-wordmark.svg?raw";
+import DepartmentField from "../../components/DepartmentField.astro";
+import Mark from "../../components/Mark.astro";
+
+const outline = wordmarkFile.match(/<g\b[\s\S]*<\/g>/)?.[0].replace(/\sfill="[^"]*"/g, "") ?? "";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1200" />
+    <meta name="robots" content="noindex" />
+    <title>Polyvaria share card</title>
+  </head>
+  <body>
+    <div class="card" data-card>
+      <header>
+        <Mark size={34} />
+        <svg class="card__name" viewBox="0 0 164 41" role="img" aria-label="Polyvaria" set:html={outline} />
+      </header>
+      <h1>
+        <span>Institutions</span>
+        <span><em>beyond</em> human</span>
+        <span>scale.</span>
+      </h1>
+      <p class="label">The first is a hedge fund, run entirely by AI agents</p>
+      <div class="card__floor"><DepartmentField beat={7} /></div>
+    </div>
+  </body>
+</html>
+
+<style>
+  body {
+    width: 1200px;
+    height: 630px;
+    overflow: hidden;
+  }
+
+  .card {
+    position: relative;
+    width: 1200px;
+    height: 630px;
+    padding: 52px 64px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto 1fr auto;
+    column-gap: 40px;
+  }
+
+  header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--ink);
+  }
+
+  .card__name {
+    height: 40px;
+    width: auto;
+    fill: currentColor;
+  }
+
+  h1 {
+    align-self: center;
+    font-family: var(--display);
+    font-size: 100px;
+    line-height: 0.99;
+    letter-spacing: -0.026em;
+    font-weight: 370;
+  }
+
+  h1 span {
+    display: block;
+    white-space: nowrap;
+  }
+
+  h1 em {
+    font-style: normal;
+    color: var(--copper);
+  }
+
+  .label {
+    font-size: 21px;
+    white-space: nowrap;
+  }
+
+  /* The floor fills the right of the card, behind the words. */
+  .card__floor {
+    position: absolute;
+    inset: 36px 30px 44px 52%;
+  }
+
+  header,
+  h1,
+  .label {
+    position: relative;
+    z-index: 3;
+  }
+</style>

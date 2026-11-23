@@ -1,0 +1,175 @@
+---
+import PodAnatomy from "../components/PodAnatomy.astro";
+import ScalingCurve from "../components/ScalingCurve.astro";
+
+/* The working rule of a pod, a line each. */
+const POINTS = [
+  "You own what a pod pursues. It owns how.",
+  "Kill criteria are fixed before a single number exists.",
+  "After every result, one of three: sharpen it with one named change, put it up as a candidate, or kill it with the number that killed it.",
+  "Nothing dead is tested twice. What held up inside it is reused.",
+  "A person is asked only what a person must decide, in one click.",
+];
+
+/*
+  The research record, whole: the hypotheses documented, and the signals
+  in production. The same 58 as the traction strip.
+*/
+const RECORD = [
+  { value: "250+", label: "hypotheses documented", tone: "" },
+  { value: "58", label: "hit the book", tone: "is-live" },
+];
+---
+
+<section class="screen" id="pod" aria-labelledby="pod-title">
+  <div class="wrap stack">
+    <div class="head" data-reveal>
+      <div>
+        <p class="label screen__label"><span class="mono">02</span> The pod</p>
+        <h2 class="claim" id="pod-title">The quantitative fund, <em>without the headcount.</em></h2>
+      </div>
+      <p class="lede">
+        Every large quantitative fund converged on one design: independent pods hunting alpha, on a shared platform for data,
+        risk and execution. Its limit has always been people.
+      </p>
+    </div>
+
+    <div class="pod-body">
+      <div class="pod-rule" data-reveal>
+        <ul class="points">
+          {POINTS.map((line) => <li>{line}</li>)}
+        </ul>
+
+        <dl class="record">
+          {
+            RECORD.map((r) => (
+              <div>
+                <dd class:list={[r.tone]}>{r.value}</dd>
+                <dt class="mono">{r.label}</dt>
+              </div>
+            ))
+          }
+        </dl>
+        <p class="record__source mono">Signals in production today</p>
+      </div>
+
+      <PodAnatomy />
+      <ScalingCurve />
+    </div>
+  </div>
+</section>
+
+<style>
+  .claim {
+    max-width: 26ch;
+  }
+
+  .claim em {
+    font-style: normal;
+    color: var(--copper);
+  }
+
+  /* The rule, the pod and the chart, three to a row. */
+  .pod-body {
+    display: grid;
+    grid-template-columns: minmax(0, 4.1fr) minmax(0, 4.8fr) minmax(0, 3.1fr);
+    align-items: center;
+    gap: clamp(1.8rem, 3.4vw, 3.2rem);
+  }
+
+  .points li {
+    font-size: 1.02rem;
+  }
+
+  /* The record: three figures in one ruled row. */
+  .record {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    justify-content: start;
+    margin-top: 1.5rem;
+  }
+
+  .record > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 0.1rem 1.5rem 0.15rem;
+    border-left: 1px solid var(--rule);
+  }
+
+  .record > div:first-child {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .record dd {
+    font-family: var(--display);
+    font-size: clamp(2rem, 1.5rem + 1.4vw, 2.7rem);
+    line-height: 1;
+    letter-spacing: -0.025em;
+    font-variant-numeric: lining-nums tabular-nums;
+    color: var(--ink);
+  }
+
+  .record dd.is-live {
+    color: var(--copper);
+  }
+
+  .record dt {
+    font-size: 0.66rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  .record__source {
+    margin-top: 0.8rem;
+    font-size: 0.68rem;
+    color: var(--ink-3);
+  }
+
+  /* On a short display the two figures give up a little width, and with it height. */
+  @media (min-width: 74.01rem) and (max-height: 52rem) {
+    .pod-body > :global(.pod) {
+      justify-self: center;
+      width: min(100%, 58vh);
+    }
+
+    .pod-body > :global(.curve) {
+      justify-self: center;
+      width: min(100%, 44vh);
+    }
+
+    .record {
+      margin-top: 1rem;
+    }
+
+    .record dd {
+      font-size: 2rem;
+    }
+  }
+
+  /* Narrower, the chart drops under the rule and the pod. */
+  @media (max-width: 74rem) {
+    .pod-body {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+
+    .pod-body > :global(.curve) {
+      grid-column: 1 / -1;
+      justify-self: center;
+      width: min(100%, 26rem);
+    }
+  }
+
+  @media (max-width: 52rem) {
+    .pod-body {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .pod-body > :global(.pod) {
+      justify-self: center;
+      width: min(100%, 30rem);
+    }
+  }
+</style>

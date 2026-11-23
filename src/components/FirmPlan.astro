@@ -1,0 +1,410 @@
+---
+/*
+  The firm as a floor plan: six rooms, a corridor between every pair,
+  and a labelled door only where work is allowed to pass. The dashed
+  line around the whole plan is the one thing people hold.
+
+  Rooms and doors are placed on a grid from the lists below; nothing is
+  positioned by hand.
+*/
+interface Room {
+  no: string;
+  name: string;
+  does: string;
+  cannot: string;
+  /** how many agents to draw in the corner */
+  staff: number;
+  /** what leaves this room, for the narrow layout where doors are not drawn */
+  passes: string;
+  col: 1 | 3 | 5;
+  row: 1 | 3;
+}
+
+const ROOMS: Room[] = [
+  { no: "01", name: "Onboarding", does: "Finds, ingests and dates every dataset.", cannot: "gain from any result", staff: 14, passes: "data to HDS / Backtesting, Research and Risk", col: 1, row: 1 },
+  { no: "02", name: "Research", does: "A principal investigator and a swarm of quants, hunting alpha.", cannot: "score its own work", staff: 42, passes: "hypotheses to HDS / Backtesting, alpha to Portfolio Management", col: 3, row: 1 },
+  { no: "03", name: "HDS / Backtesting", does: "Serves point-in-time history and referees every result.", cannot: "author a signal", staff: 16, passes: "signed verdicts to Research", col: 5, row: 1 },
+  { no: "04", name: "Risk", does: "Models the market’s risk, every day.", cannot: "see the alpha it constrains", staff: 10, passes: "the risk model to Portfolio Management", col: 1, row: 3 },
+  { no: "05", name: "Portfolio Management", does: "Plans the best book the limits allow.", cannot: "change the alpha or the risk model", staff: 10, passes: "the trade list to Execution", col: 3, row: 3 },
+  { no: "06", name: "Execution", does: "Works every order through the session.", cannot: "choose what to trade", staff: 10, passes: "trading costs to Portfolio Management", col: 5, row: 3 },
+];
+
+interface Door {
+  /** grid cell of the corridor this door crosses */
+  col: number;
+  row: number;
+  dir: "across" | "down";
+  /** one line per direction of travel */
+  ways: { label: string; back?: boolean }[];
+}
+
+const DOORS: Door[] = [
+  { col: 2, row: 1, dir: "across", ways: [{ label: "data" }, { label: "requests", back: true }] },
+  { col: 4, row: 1, dir: "across", ways: [{ label: "hypotheses" }, { label: "verdicts", back: true }] },
+  { col: 1, row: 2, dir: "down", ways: [{ label: "data" }] },
+  { col: 3, row: 2, dir: "down", ways: [{ label: "alpha" }] },
+  { col: 2, row: 3, dir: "across", ways: [{ label: "risk model" }] },
+  { col: 4, row: 3, dir: "across", ways: [{ label: "trade list" }, { label: "costs", back: true }] },
+];
+
+/* The agents in the corner of each room: a small block of points. */
+const staff = (n: number) => {
+  const cols = n > 20 ? 7 : 5;
+  return Array.from({ length: n }, (_, i) => ({ x: 3 + (i % cols) * 7, y: 3 + Math.floor(i / cols) * 7, k: (i * 5 + Math.floor(i / 3)) % 4 }));
+};
+---
+
+<figure class="firm" data-reveal>
+  <p class="bounded__label label"><span>People hold the mandate and the halt</span></p>
+  <div class="bounded__body firm__body">
+  <div class="firm__plan">
+    {
+      ROOMS.map((room) => {
+        const pts = staff(room.staff);
+        const cols = room.staff > 20 ? 7 : 5;
+        const rows = Math.ceil(room.staff / cols);
+        return (
+          <div class="room" style={`grid-column:${room.col};grid-row:${room.row}`}>
+            <svg class="room__staff" viewBox={`0 0 ${cols * 7} ${rows * 7}`} width={cols * 7} height={rows * 7} aria-hidden="true">
+              {pts.map((p) => <circle cx={p.x} cy={p.y} r="1.6" style={`--k:${p.k}`} />)}
+            </svg>
+            <p class="room__no mono">{room.no}</p>
+            <h3>{room.name}</h3>
+            <p class="room__does">{room.does}</p>
+            <p class="room__cannot">
+              <span class="label">Cannot</span> {room.cannot}.
+            </p>
+            <p class="room__passes mono">→ {room.passes}</p>
+          </div>
+        );
+      })
+    }
+    {
+      DOORS.map((door) => (
+        <div class:list={["door", `door--${door.dir}`]} style={`grid-column:${door.col};grid-row:${door.row}`} aria-hidden="true">
+          {door.ways.map((way) => (
+            <span class:list={["way", { "way--back": way.back }]}>
+              <span class="way__label mono">{way.label}</span>
+              <span class="way__line" />
+            </span>
+          ))}
+        </div>
+      ))
+    }
+  </div>
+  </div>
+  <figcaption class="visually-hidden">
+    Six rooms, one for each department. Research sends requests to Onboarding, and data passes from Onboarding to Research
+    and to Risk. Research sends hypotheses to HDS and Backtesting and receives signed verdicts. Research sends alpha, and
+    Risk sends the risk model, to Portfolio Management. Portfolio Management sends the trade list to Execution and receives
+    trading costs. No other doors exist. People hold the mandate and the halt.
+  </figcaption>
+</figure>
+
+<style>
+  .firm {
+    --corridor: clamp(4.2rem, 7vw, 6rem);
+  }
+
+  .firm__body {
+    padding: clamp(0.6rem, 1vw, 0.9rem) clamp(1.2rem, 2.2vw, 1.9rem) clamp(1.1rem, 1.8vw, 1.5rem);
+  }
+
+  .firm__plan {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--corridor) minmax(0, 1fr) var(--corridor) minmax(0, 1fr);
+    grid-template-rows: auto clamp(2.6rem, 4vw, 3.2rem) auto;
+  }
+
+  .room {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 0.85rem 1.1rem 0.9rem;
+    border: 1px solid var(--ink-3);
+    background: var(--paper-raise);
+    transition:
+      border-color 0.4s ease,
+      background 0.4s ease;
+  }
+
+  .room:hover {
+    border-color: var(--copper-mark);
+  }
+
+  .room__no {
+    font-size: 0.74rem;
+    color: var(--copper-mark);
+  }
+
+  h3 {
+    margin-top: 0.3rem;
+    font-family: var(--display);
+    font-size: clamp(1.3rem, 1rem + 0.75vw, 1.65rem);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    padding-right: 3.2rem;
+    text-wrap: balance;
+  }
+
+  .room__does {
+    margin-top: 0.4rem;
+    font-size: 0.84rem;
+    line-height: 1.4;
+    color: var(--ink-2);
+    max-width: 24em;
+    padding-bottom: 0.65rem;
+  }
+
+  /* What it cannot do sits at the foot of the room, so the refusals line up along a row. */
+  .room__cannot {
+    margin-top: auto;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--rule);
+    font-size: 0.84rem;
+    line-height: 1.35;
+    color: var(--red);
+  }
+
+  .room__cannot .label {
+    color: var(--red);
+    font-size: 0.86rem;
+    margin-right: 0.15em;
+  }
+
+  .room__passes {
+    display: none;
+    margin-top: 0.7rem;
+    font-size: 0.72rem;
+    color: var(--copper-mark);
+  }
+
+  .room__staff {
+    position: absolute;
+    top: 0.95rem;
+    right: 1.05rem;
+    overflow: visible;
+  }
+
+  .room__staff circle {
+    fill: var(--ink);
+    opacity: 0.5;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .room__staff circle {
+      animation: staff-breathe calc(2.8s + var(--k) * 0.8s) ease-in-out calc(var(--k) * -1.3s) infinite alternate;
+    }
+  }
+
+  @keyframes staff-breathe {
+    from {
+      opacity: 0.14;
+    }
+    to {
+      opacity: 0.9;
+    }
+  }
+
+  /* ── doors ────────────────────────────────────────────────── */
+
+  .door {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .door--across {
+    flex-direction: column;
+    padding-inline: 0.35rem;
+  }
+
+  .door--down {
+    flex-direction: row;
+    padding-block: 0.35rem;
+  }
+
+  .way {
+    display: grid;
+    gap: 0.28rem;
+  }
+
+  .way__label {
+    font-size: 0.68rem;
+    letter-spacing: 0.01em;
+    line-height: 1;
+    color: var(--ink-2);
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  /* A line with a head, and a point of light running along it. */
+  .way__line {
+    position: relative;
+    display: block;
+    height: 1px;
+    background: var(--copper-mark);
+  }
+
+  .way__line::after {
+    content: "";
+    position: absolute;
+    right: 0.5px;
+    top: -3px;
+    width: 6px;
+    height: 6px;
+    border-top: 1px solid var(--copper-mark);
+    border-right: 1px solid var(--copper-mark);
+    transform: rotate(45deg);
+  }
+
+  .way__line::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: -2px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--copper);
+    opacity: 0;
+  }
+
+  .way--back .way__line {
+    transform: scaleX(-1);
+  }
+
+  .door--down .way {
+    grid-template-columns: auto auto;
+    align-items: center;
+    gap: 0.55rem;
+  }
+
+  .door--down .way__line {
+    order: -1;
+    width: 1px;
+    height: 100%;
+  }
+
+  .door--down .way__line::after {
+    right: auto;
+    left: -3px;
+    top: auto;
+    bottom: 0.5px;
+    transform: rotate(135deg);
+  }
+
+  .door--down .way__line::before {
+    left: -2px;
+    top: 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .way__line::before {
+      animation: way-run 3.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    }
+
+    .way--back .way__line::before {
+      animation-delay: -1.6s;
+    }
+
+    .door--down .way__line::before {
+      animation-name: way-fall;
+    }
+  }
+
+  @keyframes way-run {
+    0% {
+      left: 0;
+      opacity: 0;
+    }
+    15%,
+    80% {
+      opacity: 1;
+    }
+    100% {
+      left: calc(100% - 8px);
+      opacity: 0;
+    }
+  }
+
+  @keyframes way-fall {
+    0% {
+      top: 0;
+      opacity: 0;
+    }
+    15%,
+    80% {
+      opacity: 1;
+    }
+    100% {
+      top: calc(100% - 8px);
+      opacity: 0;
+    }
+  }
+
+  @media (min-width: 58.01rem) and (max-height: 52rem) {
+    .firm__plan {
+      grid-template-rows: auto 2.3rem auto;
+    }
+
+    .room {
+      padding: 0.6rem 1rem 0.65rem;
+    }
+
+    h3 {
+      margin-top: 0.15rem;
+      font-size: 1.3rem;
+    }
+
+    .room__does {
+      margin-top: 0.25rem;
+      padding-bottom: 0.45rem;
+    }
+
+    .room__cannot {
+      padding-top: 0.4rem;
+    }
+
+    .room__staff {
+      top: 0.7rem;
+    }
+  }
+
+  /* Below the width where three rooms sit side by side, the rooms stack
+     and each says in a line what leaves it. */
+  @media (max-width: 58rem) {
+    .firm__plan {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: none;
+      gap: 0.9rem;
+    }
+
+    .room {
+      grid-column: auto !important;
+      grid-row: auto !important;
+    }
+
+    .door {
+      display: none;
+    }
+
+    .room__passes {
+      display: block;
+    }
+
+    .firm__body {
+      padding: 1.5rem 0.9rem 0.9rem;
+    }
+  }
+
+  @media (max-width: 36rem) {
+    .firm__plan {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .room__does {
+      min-height: 0;
+    }
+  }
+</style>

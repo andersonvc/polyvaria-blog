@@ -1,0 +1,327 @@
+---
+/*
+  One morning, from the record: a dataset the firm did not have, from
+  the ask to serving, crossing four teams with nobody in the path.
+
+  Steps are placed from the list below. Columns are evenly spaced, one
+  per step, because the first five happen inside half an hour and a
+  true time axis would crush them; the times are printed over each.
+*/
+const LANES = ["Research pod", "Front door", "Onboarding", "The lake"] as const;
+
+const STEPS = [
+  { t: "09:04", lane: 0, verb: "Ask", note: ["in plain English"] },
+  { t: "09:05", lane: 1, verb: "Search", note: ["the catalog"] },
+  { t: "09:07", lane: 1, verb: "Probe", note: ["a vendor sample"] },
+  { t: "09:12", lane: 2, verb: "Write", note: ["the ingestion code"] },
+  { t: "09:31", lane: 2, verb: "Gate", note: ["proof it cannot", "see the future"] },
+  { t: "11:46", lane: 3, verb: "Backfill", note: ["history to 2010"] },
+  { t: "13:58", lane: 3, verb: "Serve", note: ["live in the catalog"] },
+] as const;
+
+const W = 1180;
+const H = 470;
+const X0 = 248;
+const DX = 146;
+const Y0 = 96;
+const LP = 92;
+const R = 10;
+
+const x = (i: number) => X0 + i * DX;
+const y = (lane: number) => Y0 + lane * LP;
+
+/* The path of the work: straight within a team, a rounded step down between teams. */
+let d = `M${x(0)} ${y(STEPS[0].lane)}`;
+for (let i = 1; i < STEPS.length; i++) {
+  const a = STEPS[i - 1]!;
+  const b = STEPS[i]!;
+  if (a.lane === b.lane) {
+    d += ` H${x(i)}`;
+  } else {
+    const mx = (x(i - 1) + x(i)) / 2;
+    d += ` H${mx - R} Q${mx} ${y(a.lane)} ${mx} ${y(a.lane) + R} V${y(b.lane) - R} Q${mx} ${y(b.lane)} ${mx + R} ${y(b.lane)} H${x(i)}`;
+  }
+}
+const last = STEPS.length - 1;
+---
+
+<figure class="morning" data-reveal>
+  <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="morning-title morning-desc">
+    <title id="morning-title">One dataset, from the ask to serving</title>
+    <desc id="morning-desc">
+      A timeline across four teams. At 09:04 a research pod asks for data in plain English and keeps working. At 09:05 the
+      front door searches the catalog and at 09:07 probes a vendor sample. At 09:12 onboarding writes the ingestion code,
+      and at 09:31 it passes the gate: proof the data cannot see the future. At 11:46 the lake backfills history to 2010. At
+      13:58 the dataset is served and the pod’s backtest resumes. Four hours and fifty-four minutes, with no human in the
+      path.
+    </desc>
+
+    {
+      LANES.map((name, i) => (
+        <g>
+          <line class="morning__lane" x1="0" x2={W} y1={y(i) - LP / 2 + 6} y2={y(i) - LP / 2 + 6} />
+          <text class="morning__team" x="0" y={y(i) + 5}>
+            {name}
+          </text>
+        </g>
+      ))
+    }
+    <line class="morning__lane" x1="0" x2={W} y1={y(LANES.length - 1) + LP / 2 + 6} y2={y(LANES.length - 1) + LP / 2 + 6}></line>
+
+    {
+      STEPS.map((s, i) => (
+        <g>
+          <line class="morning__guide" x1={x(i)} x2={x(i)} y1="34" y2={y(LANES.length - 1) + LP / 2 + 6} />
+          <text class="morning__time" x={x(i)} y="22" text-anchor="middle">
+            {s.t}
+          </text>
+        </g>
+      ))
+    }
+
+    <!-- the pod keeps working while the firm fetches what it asked for -->
+    <line class="morning__waiting" x1={x(0)} x2={x(last)} y1={y(0)} y2={y(0)}></line>
+    <text class="morning__aside" x={(x(1) + x(3)) / 2} y={y(0) - 12} text-anchor="middle">the pod keeps working</text>
+
+    <path class="morning__path" d={d} pathLength="1"></path>
+    <line class="morning__return" x1={x(last)} x2={x(last)} y1={y(3) - 7} y2={y(0) + 8} pathLength="1"></line>
+
+    {
+      STEPS.map((s, i) => (
+        <g class="morning__step" style={`--i:${i}`}>
+          <circle class="morning__node" cx={x(i)} cy={y(s.lane)} r="6" />
+          <text class="morning__verb" x={x(i)} y={y(s.lane) + 30} text-anchor="middle">
+            {s.verb}
+          </text>
+          {s.note.map((line, k) => (
+            <text class="morning__note" x={x(i)} y={y(s.lane) + 48 + k * 16} text-anchor="middle">
+              {line}
+            </text>
+          ))}
+        </g>
+      ))
+    }
+
+    <g class="morning__step" style={`--i:${STEPS.length}`}>
+      <circle class="morning__node morning__node--open" cx={x(last)} cy={y(0)} r="7"></circle>
+      <text class="morning__verb" x={x(last) - 16} y={y(0) - 12} text-anchor="end">The backtest resumes</text>
+    </g>
+  </svg>
+
+  <ol class="morning__list">
+    {
+      STEPS.map((s) => (
+        <li>
+          <span class="mono">{s.t}</span>
+          <span>
+            <strong>{s.verb}</strong> {s.note.join(" ")}
+            <span class="label">{LANES[s.lane]}</span>
+          </span>
+        </li>
+      ))
+    }
+  </ol>
+
+  <figcaption>
+    <span class="morning__elapsed">4<small>h</small> 54<small>min</small></span>
+    <span class="morning__tail">from the ask to live data. No human in the path. <span class="label">From the record</span></span>
+  </figcaption>
+</figure>
+
+<style>
+  svg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .morning__lane {
+    stroke: var(--rule-faint);
+    stroke-width: 1;
+  }
+
+  .morning__guide {
+    stroke: var(--rule-faint);
+    stroke-width: 1;
+    stroke-dasharray: 1.5 5;
+  }
+
+  .morning__team {
+    font-family: var(--serif);
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    fill: var(--ink-3);
+  }
+
+  .morning__time {
+    font-family: var(--mono);
+    font-size: 14px;
+    fill: var(--copper);
+  }
+
+  .morning__waiting {
+    stroke: var(--ink-3);
+    stroke-width: 1.2;
+    stroke-dasharray: 1.5 7;
+    stroke-linecap: round;
+  }
+
+  .morning__aside {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 14.5px;
+    fill: var(--ink-3);
+  }
+
+  .morning__path,
+  .morning__return {
+    fill: none;
+    stroke: var(--copper);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .morning__node {
+    fill: var(--copper);
+    stroke: var(--paper);
+    stroke-width: 3;
+    paint-order: stroke;
+  }
+
+  .morning__node--open {
+    fill: var(--paper);
+    stroke: var(--copper);
+    stroke-width: 2;
+  }
+
+  .morning__verb {
+    font-family: var(--display);
+    font-size: 21px;
+    letter-spacing: -0.01em;
+    fill: var(--ink);
+    paint-order: stroke;
+    stroke: var(--paper);
+    stroke-width: 5;
+  }
+
+  .morning__note {
+    font-family: var(--serif);
+    font-size: 13.5px;
+    fill: var(--ink-2);
+    paint-order: stroke;
+    stroke: var(--paper);
+    stroke-width: 4;
+  }
+
+  figcaption {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.6rem;
+    margin-top: 1.8rem;
+    padding-top: 1.3rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .morning__elapsed {
+    font-family: var(--display);
+    font-size: var(--step-3);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--copper);
+    font-variant-numeric: lining-nums;
+  }
+
+  .morning__elapsed small {
+    font-size: 0.42em;
+    letter-spacing: 0;
+    margin: 0 0.18em 0 0.06em;
+    color: var(--ink-2);
+  }
+
+  .morning__tail {
+    font-size: var(--step-1);
+    line-height: 1.35;
+    color: var(--ink-2);
+  }
+
+  .morning__tail .label {
+    margin-left: 0.7rem;
+    white-space: nowrap;
+  }
+
+  .morning__list {
+    display: none;
+  }
+
+  /* The work is traced as the figure comes into view. */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .morning .morning__path,
+    :global(.js) .morning .morning__return {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+    }
+
+    :global(.js) .morning .morning__step {
+      opacity: 0;
+    }
+
+    :global(.js) .morning.is-in .morning__path {
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset 2.8s cubic-bezier(0.4, 0.2, 0.2, 1) 0.4s;
+    }
+
+    :global(.js) .morning.is-in .morning__return {
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset 0.7s ease 3.2s;
+    }
+
+    :global(.js) .morning.is-in .morning__step {
+      opacity: 1;
+      transition: opacity 0.5s ease calc(0.4s + var(--i) * 0.42s);
+    }
+  }
+
+  @media (max-width: 52rem) {
+    svg {
+      display: none;
+    }
+
+    .morning__list {
+      display: grid;
+      border-top: 1px solid var(--rule);
+    }
+
+    .morning__list li {
+      display: grid;
+      grid-template-columns: 3.6rem minmax(0, 1fr);
+      gap: 0.8rem;
+      align-items: baseline;
+      padding: 0.7rem 0 0.75rem;
+      border-bottom: 1px solid var(--rule-faint);
+    }
+
+    .morning__list .mono {
+      color: var(--copper);
+    }
+
+    .morning__list strong {
+      font-family: var(--display);
+      font-weight: 400;
+      font-size: 1.15em;
+    }
+
+    .morning__list .label {
+      display: block;
+      font-size: 0.82rem;
+    }
+
+    figcaption {
+      border-top: 0;
+      margin-top: 1.2rem;
+      padding-top: 0;
+    }
+  }
+</style>

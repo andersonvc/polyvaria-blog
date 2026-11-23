@@ -1,0 +1,255 @@
+---
+/*
+  The plan, in four steps, each with a small figure drawn in the page's
+  own vocabulary: a point is an agent, a disk of points is an
+  institution.
+*/
+const GOLDEN = Math.PI * (3 - Math.sqrt(5));
+
+/** A disk of points on a sunflower spiral, as path data. */
+const disk = (cx: number, cy: number, radius: number, points: number) => {
+  let d = "";
+  for (let i = 0; i < points; i++) {
+    const r = radius * Math.sqrt((i + 0.5) / points);
+    const a = i * GOLDEN;
+    d += `M${(cx + r * Math.cos(a)).toFixed(1)} ${(cy + r * Math.sin(a)).toFixed(1)}h.01`;
+  }
+  return d;
+};
+
+const CY = 46;
+
+const STEPS = [
+  {
+    text: "Build a fully autonomous fund.",
+    done: true,
+    alt: "One small floor of agents.",
+    lit: [disk(18, CY, 15, 46)],
+    dim: [] as string[],
+    rings: [] as { cx: number; cy: number; r: number }[],
+  },
+  {
+    text: "Scale the floor from hundreds of agents to thousands.",
+    alt: "The same floor, many times larger.",
+    lit: [disk(44, CY, 42, 620)],
+    dim: [],
+    rings: [],
+  },
+  {
+    text: "See, test and act on more than every human fund combined.",
+    alt: "The large floor beside a handful of small human funds.",
+    lit: [disk(44, CY, 42, 620)],
+    dim: [],
+    rings: [0, 1, 2, 3, 4, 5, 6, 7].map((k) => ({ cx: 108 + (k % 4) * 15, cy: CY - 8 + Math.floor(k / 4) * 16, r: 5 })),
+  },
+  {
+    text: "Take the same architecture beyond finance.",
+    alt: "Several floors side by side.",
+    lit: [disk(26, CY, 24, 210)],
+    dim: [disk(84, CY, 24, 210), disk(142, CY, 24, 210)],
+    rings: [],
+  },
+];
+---
+
+<section class="screen" id="plan" aria-labelledby="plan-title">
+  <div class="wrap stack">
+    <div data-reveal>
+      <p class="label screen__label"><span class="mono">06</span> The plan</p>
+      <h2 class="claim" id="plan-title">The plan.</h2>
+    </div>
+    <ol class="steps">
+      {
+        STEPS.map((step, i) => (
+          <li class:list={{ "is-done": step.done }} data-reveal style={`--d:${(i * 0.16).toFixed(2)}s`}>
+            <svg class="steps__glyph" viewBox="0 0 172 92" role="img" aria-label={step.alt}>
+              {step.dim.map((d) => <path class="steps__points steps__points--dim" d={d} />)}
+              {step.lit.map((d) => <path class="steps__points" d={d} />)}
+              {step.rings.map((c) => <circle class="steps__ring" cx={c.cx} cy={c.cy} r={c.r} />)}
+            </svg>
+            <span class="steps__rail" aria-hidden="true">
+              <span class="steps__node">
+                {step.done && (
+                  <svg viewBox="0 0 16 16" width="14" height="14">
+                    <path d="M3.5 8.4l3 3 6-6.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                )}
+              </span>
+              <span class="steps__line" />
+            </span>
+            <span class="steps__no mono">
+              {String(i + 1).padStart(2, "0")}
+              {step.done && <span class="steps__done"> · done</span>}
+            </span>
+            <span class="steps__text">{step.text}</span>
+          </li>
+        ))
+      }
+    </ol>
+
+    <div class="beyond" data-reveal>
+      <p>
+        The fund is the first institution of its kind, and it is built toward something larger:
+        <span>institutions that observe, think and act at a scale no number of people could be hired to reach.</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .steps {
+    --gap: clamp(1.5rem, 3vw, 3rem);
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    column-gap: var(--gap);
+  }
+
+  li {
+    display: grid;
+    align-content: start;
+  }
+
+  .steps__glyph {
+    width: min(100%, 11.5rem);
+    height: auto;
+    overflow: visible;
+  }
+
+  .steps__points {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 2.1;
+    stroke-linecap: round;
+    opacity: 0.85;
+  }
+
+  .is-done .steps__points {
+    stroke: var(--copper);
+    opacity: 1;
+  }
+
+  .steps__points--dim {
+    opacity: 0.32;
+  }
+
+  .steps__ring {
+    fill: none;
+    stroke: var(--ink-3);
+    stroke-width: 1.1;
+  }
+
+  /* The rail that joins one step to the next. */
+  .steps__rail {
+    display: flex;
+    align-items: center;
+    margin: 1.1rem calc(-1 * var(--gap)) 1rem 0;
+  }
+
+  .steps__node {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 1.7rem;
+    height: 1.7rem;
+    border: 1px solid var(--ink-3);
+    border-radius: 50%;
+    color: var(--paper);
+  }
+
+  .is-done .steps__node {
+    background: var(--copper);
+    border-color: var(--copper);
+  }
+
+  .steps__line {
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+
+  .is-done .steps__line {
+    background: var(--copper-mark);
+  }
+
+  li:last-child .steps__rail {
+    margin-right: 0;
+  }
+
+  li:last-child .steps__line {
+    background: linear-gradient(to right, var(--rule), transparent);
+  }
+
+  .steps__no {
+    font-size: 0.78rem;
+    color: var(--ink-3);
+  }
+
+  .steps__done {
+    color: var(--copper);
+  }
+
+  .steps__text {
+    margin-top: 0.6rem;
+    font-family: var(--display);
+    font-size: clamp(1.3rem, 0.9rem + 1vw, 1.75rem);
+    line-height: 1.14;
+    letter-spacing: -0.015em;
+    color: var(--ink-2);
+    max-width: 15ch;
+    text-wrap: balance;
+  }
+
+  .is-done .steps__text {
+    color: var(--ink);
+  }
+
+  /* Where it leads: one paragraph, set as the page's last word. */
+  .beyond {
+    padding-top: clamp(1.3rem, 2.2vw, 1.9rem);
+    border-top: 1px solid var(--rule);
+  }
+
+  .beyond p {
+    max-width: 36em;
+    text-wrap: balance;
+    font-family: var(--display);
+    font-size: clamp(1.25rem, 1rem + 0.85vw, 1.7rem);
+    line-height: 1.32;
+    letter-spacing: -0.012em;
+    color: var(--ink-2);
+  }
+
+  .beyond span {
+    color: var(--ink);
+  }
+
+  @media (max-width: 62rem) {
+    .steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      row-gap: 3rem;
+    }
+
+    .steps__rail {
+      margin-right: 0;
+    }
+
+    .steps__line {
+      display: none;
+    }
+  }
+
+  @media (max-width: 34rem) {
+    .steps {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: 2.4rem;
+    }
+
+    .steps__glyph {
+      width: 10rem;
+    }
+
+    .steps__text {
+      max-width: 20ch;
+    }
+  }
+</style>

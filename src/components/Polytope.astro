@@ -1,0 +1,436 @@
+---
+/*
+  Fig. 1: the constraint polytope.
+
+  Rendered here, at build time, in its resting pose, so the figure is
+  complete without script. In the browser the same geometry code takes
+  over: the pointer turns the objective, the solve moves to whichever
+  vertex is now optimal, and the readout beside the figure reports the
+  constraints that bind there.
+*/
+import { CONSTRAINTS, FIGURE, PLANES, PLANE_OWNER, REST, REST_OBJECTIVE } from "../content/constraints";
+import { buildSolid, pose } from "../lib/polytope";
+
+interface Props {
+  /** the solid alone, without readout or caption (used by the share card) */
+  bare?: boolean;
+}
+
+const { bare = false } = Astro.props;
+const { width: W, height: H, view: VIEW, arrow } = FIGURE;
+
+const solid = buildSolid(PLANES);
+const frame = pose(solid, { ...REST, objective: REST_OBJECTIVE }, VIEW);
+
+const bindingPlanes = new Set(frame.binding.map((f) => solid.faces[f]!.plane));
+const state = CONSTRAINTS.map((_, c) => {
+  const hit = PLANE_OWNER.map((o, plane) => ({ o, plane })).find(
+    ({ o, plane }) => o.constraint === c && bindingPlanes.has(plane),
+  );
+  return hit ? (hit.o.side ? `binds, ${hit.o.side}` : "binds") : "slack";
+});
+
+const [ox, oy] = frame.points[frame.optimum]!;
+const len = Math.hypot(REST_OBJECTIVE[0], REST_OBJECTIVE[1]);
+const ax = ox + (REST_OBJECTIVE[0] / len) * arrow;
+const ay = oy - (REST_OBJECTIVE[1] / len) * arrow;
+---
+
+<figure class="polytope" data-polytope>
+  <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="polytope-title polytope-desc">
+    <title id="polytope-title">The feasible set of the daily solve, drawn as a polytope</title>
+    <desc id="polytope-desc">
+      A faceted convex solid in three-quarter view. Each face is one constraint
+      of the portfolio optimizer. One vertex is marked: the point a linear
+      objective reaches, where three constraints bind at once.
+    </desc>
+    <defs>
+      <marker id="polytope-tip" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+        <path d="M0.5 0.8 L7.5 4 L0.5 7.2" fill="none" stroke="context-stroke" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"></path>
+      </marker>
+    </defs>
+
+    <g class="polytope__faces">
+      {
+        solid.faces.map((face, f) => (
+          <polygon
+            data-face={f}
+            class:list={{ binds: frame.binding.includes(f) && frame.front[f] }}
+            points={face.loop.map((v) => frame.points[v]!.map((n) => n.toFixed(1)).join(",")).join(" ")}
+          />
+        ))
+      }
+    </g>
+
+    <g class="polytope__edges">
+      {
+        solid.edges.map((edge, e) => {
+          const [x1, y1] = frame.points[edge.a]!;
+          const [x2, y2] = frame.points[edge.b]!;
+          const meets = edge.a === frame.optimum || edge.b === frame.optimum;
+          return (
+            <line
+              data-edge={e}
+              class:list={[frame.edges[e], { binds: meets && frame.edges[e] !== "hidden" }]}
+              x1={x1.toFixed(1)}
+              y1={y1.toFixed(1)}
+              x2={x2.toFixed(1)}
+              y2={y2.toFixed(1)}
+            />
+          );
+        })
+      }
+    </g>
+
+    <line class="polytope__objective" data-objective x1={ox.toFixed(1)} y1={oy.toFixed(1)} x2={ax.toFixed(1)} y2={ay.toFixed(1)} marker-end="url(#polytope-tip)"></line>
+    <text class="polytope__alpha" data-alpha x={(ax + 8).toFixed(1)} y={(ay - 4).toFixed(1)}>α</text>
+    <circle class="polytope__optimum" data-optimum cx={ox.toFixed(1)} cy={oy.toFixed(1)} r="4.5"></circle>
+  </svg>
+
+  <figcaption hidden={bare}>
+    <table class="polytope__readout">
+      <caption class="label">Limits binding at the marked corner</caption>
+      <tbody>
+        {
+          CONSTRAINTS.map((c, i) => (
+            <tr data-constraint={i} class:list={{ binds: state[i] !== "slack" }}>
+              <th scope="row">{c.name}</th>
+              <td class="polytope__bound num">{c.bound}</td>
+              <td class="polytope__state" data-state>
+                {state[i]}
+              </td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+    <p class="polytope__caption">
+      The books the optimizer may choose from form a solid, and every limit cuts a face of it.
+      <span class="polytope__hint">Move the pointer to change what the book wants.</span>
+      However hard the alpha pushes, the answer stays inside.
+    </p>
+  </figcaption>
+</figure>
+
+<script>
+  import { CONSTRAINTS, FIGURE, PLANES, PLANE_OWNER, REST, REST_OBJECTIVE } from "../content/constraints";
+  import { buildSolid, norm, pose, type Vec3 } from "../lib/polytope";
+
+  const { view: VIEW, arrow: ARROW, width: WIDTH } = FIGURE;
+
+  const root = document.querySelector<HTMLElement>("[data-polytope]");
+  const svg = root?.querySelector("svg");
+
+  if (root && svg) {
+    const solid = buildSolid(PLANES);
+    const faces = [...svg.querySelectorAll<SVGPolygonElement>("[data-face]")];
+    const edges = [...svg.querySelectorAll<SVGLineElement>("[data-edge]")];
+    const optimum = svg.querySelector<SVGCircleElement>("[data-optimum]")!;
+    const objective = svg.querySelector<SVGLineElement>("[data-objective]")!;
+    const alpha = svg.querySelector<SVGTextElement>("[data-alpha]")!;
+    const rows = [...root.querySelectorAll<HTMLTableRowElement>("[data-constraint]")];
+    const cells = rows.map((row) => row.querySelector<HTMLElement>("[data-state]")!);
+
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const hover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+    let yaw: number = REST.yaw;
+    let target: Vec3 = REST_OBJECTIVE;
+    let current: Vec3 = REST_OBJECTIVE;
+    let lastOptimum = -1;
+    let pointerSeen = false;
+
+    const set = (el: Element, name: string, value: number) => el.setAttribute(name, value.toFixed(1));
+
+    function draw(): void {
+      const frame = pose(solid, { yaw, pitch: REST.pitch, objective: current }, VIEW);
+
+      faces.forEach((el, f) => {
+        const face = solid.faces[f]!;
+        el.setAttribute(
+          "points",
+          face.loop.map((v) => `${frame.points[v]![0].toFixed(1)},${frame.points[v]![1].toFixed(1)}`).join(" "),
+        );
+        el.classList.toggle("binds", frame.binding.includes(f) && frame.front[f]!);
+      });
+
+      edges.forEach((el, e) => {
+        const edge = solid.edges[e]!;
+        const kind = frame.edges[e]!;
+        const [x1, y1] = frame.points[edge.a]!;
+        const [x2, y2] = frame.points[edge.b]!;
+        set(el, "x1", x1);
+        set(el, "y1", y1);
+        set(el, "x2", x2);
+        set(el, "y2", y2);
+        const meets = edge.a === frame.optimum || edge.b === frame.optimum;
+        el.setAttribute("class", `${kind}${meets && kind !== "hidden" ? " binds" : ""}`);
+      });
+
+      const [ox, oy] = frame.points[frame.optimum]!;
+      const len = Math.hypot(current[0], current[1]) || 1;
+      const ax = ox + (current[0] / len) * ARROW;
+      const ay = oy - (current[1] / len) * ARROW;
+      set(optimum, "cx", ox);
+      set(optimum, "cy", oy);
+      set(objective, "x1", ox);
+      set(objective, "y1", oy);
+      set(objective, "x2", ax);
+      set(objective, "y2", ay);
+      set(alpha, "x", ax + (current[0] >= 0 ? 8 : -16));
+      set(alpha, "y", ay + (current[1] >= 0 ? -4 : 14));
+
+      if (frame.optimum !== lastOptimum) {
+        lastOptimum = frame.optimum;
+        const binding = new Set(frame.binding.map((f) => solid.faces[f]!.plane));
+        CONSTRAINTS.forEach((_, c) => {
+          const owner = PLANE_OWNER.find((o, plane) => o.constraint === c && binding.has(plane));
+          const text = owner ? (owner.side ? `binds, ${owner.side}` : "binds") : "slack";
+          cells[c]!.textContent = text;
+          rows[c]!.classList.toggle("binds", Boolean(owner));
+        });
+      }
+    }
+
+    /* The objective follows the pointer with a little lag, so the
+       optimum changes vertex decisively instead of chattering on a
+       boundary. */
+    function ease(dt: number): boolean {
+      const k = 1 - Math.exp(-dt * 7);
+      const next: Vec3 = [
+        current[0] + (target[0] - current[0]) * k,
+        current[1] + (target[1] - current[1]) * k,
+        current[2] + (target[2] - current[2]) * k,
+      ];
+      const moved = Math.hypot(next[0] - current[0], next[1] - current[1], next[2] - current[2]) > 1e-4;
+      current = next;
+      return moved;
+    }
+
+    function aim(clientX: number, clientY: number): void {
+      const box = svg!.getBoundingClientRect();
+      const k = WIDTH / box.width;
+      const dx = (clientX - box.left) * k - VIEW.cx;
+      const dy = (clientY - box.top) * k - VIEW.cy;
+      const reach = Math.hypot(dx, dy);
+      if (reach < 6) return;
+      target = norm([dx / reach, -dy / reach, 0.3]);
+      pointerSeen = true;
+    }
+
+    let visible = true;
+    let frameId = 0;
+    let last = 0;
+    let clock = 0;
+
+    function tick(now: number): void {
+      const dt = Math.min(0.05, last ? (now - last) / 1000 : 0);
+      last = now;
+      clock += dt;
+
+      if (!still) {
+        /* A slow sway about the resting pose, not a spin: the mark is
+           recognisable in every frame. */
+        yaw = REST.yaw + 0.3 * Math.sin(clock * 0.11);
+        if (!pointerSeen) {
+          const a = 0.66 + clock * 0.16;
+          target = norm([Math.cos(a), Math.sin(a), 0.3]);
+        }
+      }
+
+      const moving = ease(dt);
+      if (!still || moving) draw();
+      frameId = !still || moving ? requestAnimationFrame(tick) : 0;
+    }
+
+    function wake(): void {
+      if (!frameId && visible && !document.hidden) {
+        last = 0;
+        frameId = requestAnimationFrame(tick);
+      }
+    }
+
+    function sleep(): void {
+      if (frameId) cancelAnimationFrame(frameId);
+      frameId = 0;
+    }
+
+    if (hover) {
+      const stage = root.closest<HTMLElement>("[data-polytope-stage]") ?? root;
+      stage.addEventListener(
+        "pointermove",
+        (event) => {
+          aim(event.clientX, event.clientY);
+          wake();
+        },
+        { passive: true },
+      );
+      root.classList.add("is-live");
+    }
+
+    new IntersectionObserver(([entry]) => {
+      visible = Boolean(entry?.isIntersecting);
+      if (visible) wake();
+      else sleep();
+    }).observe(svg);
+
+    document.addEventListener("visibilitychange", () => (document.hidden ? sleep() : wake()));
+
+    if (!still) wake();
+  }
+</script>
+
+<style>
+  .polytope {
+    display: grid;
+    gap: 1rem;
+  }
+
+  svg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  /* Drawn the way a solid is drawn in a geometry text: outline heavy,
+     creases light, the far side dashed. */
+  .polytope__faces polygon {
+    fill: transparent;
+    stroke: none;
+  }
+
+  .polytope__faces polygon.binds {
+    fill: var(--copper-wash);
+  }
+
+  .polytope__edges line {
+    stroke: var(--ink);
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .polytope__edges .outline {
+    stroke-width: 1.3;
+  }
+
+  .polytope__edges .inner {
+    stroke-width: 0.8;
+  }
+
+  .polytope__edges .hidden {
+    stroke-width: 0.7;
+    stroke: var(--ink-3);
+    stroke-dasharray: 2 4;
+  }
+
+  .polytope__edges .binds {
+    stroke: var(--copper-mark);
+    stroke-width: 1.6;
+  }
+
+  .polytope__optimum {
+    fill: var(--copper-mark);
+    stroke: var(--paper);
+    stroke-width: 2;
+  }
+
+  .polytope__objective {
+    stroke: var(--ink);
+    stroke-width: 1;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .polytope__alpha {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 17px;
+    fill: var(--ink);
+  }
+
+  figcaption {
+    display: grid;
+    gap: 1.2rem;
+  }
+
+  figcaption[hidden] {
+    display: none;
+  }
+
+  .polytope__readout {
+    font-size: var(--step--1);
+    line-height: 1.35;
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--rule);
+    font-variant-numeric: lining-nums;
+  }
+
+  .polytope__readout caption {
+    text-align: left;
+    padding-bottom: 0.45rem;
+    font-size: var(--step--1);
+  }
+
+  .polytope__readout th,
+  .polytope__readout td {
+    padding: 0.3rem 0;
+    border-top: 1px solid var(--rule-faint);
+    vertical-align: baseline;
+  }
+
+  .polytope__readout tr:first-child th,
+  .polytope__readout tr:first-child td {
+    border-top: 0;
+  }
+
+  .polytope__bound {
+    color: var(--ink-2);
+    padding-inline: 0.75rem;
+    white-space: nowrap;
+  }
+
+  .polytope__bound i {
+    font-style: italic;
+  }
+
+  .polytope__state {
+    text-align: right;
+    font-style: italic;
+    color: var(--ink-3);
+    white-space: nowrap;
+    /* wide enough for "binds, upper" so the table never reflows */
+    min-width: 6.2em;
+  }
+
+  .polytope__readout tr.binds th {
+    color: var(--ink);
+  }
+
+  .polytope__readout tr.binds .polytope__state {
+    color: var(--copper);
+    font-style: normal;
+  }
+
+  .polytope__readout tr:not(.binds) th {
+    color: var(--ink-2);
+  }
+
+  .polytope__caption {
+    font-size: var(--step--1);
+    line-height: 1.5;
+    color: var(--ink-2);
+  }
+
+  .polytope__caption .label {
+    margin-right: 0.5em;
+    color: var(--ink);
+  }
+
+  .polytope__hint {
+    display: none;
+  }
+
+  .is-live .polytope__hint {
+    display: inline;
+  }
+</style>
