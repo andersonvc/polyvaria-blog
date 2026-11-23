@@ -1,0 +1,154 @@
+---
+/*
+  Fig. 3: how the bar rises with the number of trials. The curve is
+  computed at build time from the same expression the referee's
+  deflation uses; nothing on it is drawn by hand.
+*/
+import { expectedMaxSharpe } from "../lib/deflation";
+
+interface Props {
+  /** the trial count to call out on the curve */
+  counted: number;
+}
+
+const { counted } = Astro.props;
+const claimed = 1;
+
+const W = 560;
+const H = 300;
+const LEFT = 34;
+const RIGHT = 548;
+const TOP = 34;
+const BOTTOM = 252;
+const MAX_TRIALS = 3000;
+const MAX_Y = 4;
+
+const sx = (n: number) => LEFT + (Math.log10(n) / Math.log10(MAX_TRIALS)) * (RIGHT - LEFT);
+const sy = (v: number) => BOTTOM - (v / MAX_Y) * (BOTTOM - TOP);
+
+const curve: string[] = [];
+for (let i = 0; i <= 160; i++) {
+  const n = Math.pow(MAX_TRIALS / 2, i / 160) * 2;
+  curve.push(`${sx(n).toFixed(1)},${sy(expectedMaxSharpe(n)).toFixed(1)}`);
+}
+
+const bar = expectedMaxSharpe(counted);
+const xTicks = [1, 10, 100, 1000];
+const yTicks = [0, 1, 2, 3, 4];
+const fmt = (n: number) => n.toLocaleString("en-US");
+---
+
+<svg class="deflation" viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="deflation-title deflation-desc">
+  <title id="deflation-title">The best Sharpe ratio luck alone produces, against the number of trials</title>
+  <desc id="deflation-desc">
+    A curve rising from zero at one trial to about {expectedMaxSharpe(1000).toFixed(1)} standard deviations at one thousand trials.
+    At {fmt(counted)} trials the bar is {bar.toFixed(1)} standard deviations above zero.
+  </desc>
+
+  {
+    yTicks.map((t) => (
+      <g>
+        <line class:list={["deflation__grid", { "deflation__grid--base": t === 0 }]} x1={LEFT} x2={RIGHT} y1={sy(t)} y2={sy(t)} />
+        <text class="deflation__tick" x={LEFT - 8} y={sy(t) + 3.5} text-anchor="end">
+          {t}
+        </text>
+      </g>
+    ))
+  }
+  {
+    xTicks.map((t) => (
+      <g>
+        <line class="deflation__mark" x1={sx(t)} x2={sx(t)} y1={BOTTOM} y2={BOTTOM + 5} />
+        <text class="deflation__tick" x={sx(t)} y={BOTTOM + 19} text-anchor="middle">
+          {fmt(t)}
+        </text>
+      </g>
+    ))
+  }
+  <text class="deflation__axis" x={RIGHT} y={BOTTOM + 38} text-anchor="end">trials, log scale</text>
+  <text class="deflation__axis" x={LEFT - 22} y={TOP - 18}>σ of trial Sharpe ratios</text>
+
+  <polyline class="deflation__curve" points={`${sx(1).toFixed(1)},${sy(0).toFixed(1)} ${curve.join(" ")}`}></polyline>
+
+  <!-- what a request used to claim -->
+  <line class="deflation__leader" x1={sx(claimed) + 5} y1={sy(0) - 4} x2={sx(7) - 6} y2={sy(0.42) + 1}></line>
+  <circle class="deflation__point deflation__point--open" cx={sx(claimed)} cy={sy(0)} r="4"></circle>
+  <text class="deflation__note" x={sx(7)} y={sy(0.42) + 4}>One trial: no bar to clear</text>
+
+  <!-- what the ledger showed -->
+  <line class="deflation__drop" x1={sx(counted)} x2={sx(counted)} y1={sy(bar) + 5} y2={BOTTOM}></line>
+  <circle class="deflation__point" cx={sx(counted)} cy={sy(bar)} r="4"></circle>
+  <text class="deflation__note" x={sx(counted) - 10} y={sy(bar) - 26} text-anchor="end">
+    <tspan>{fmt(counted)} trials:</tspan>
+    <tspan x={sx(counted) - 10} dy="14">{bar.toFixed(1)} σ before it counts</tspan>
+  </text>
+</svg>
+
+<style>
+  .deflation {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .deflation__grid {
+    stroke: var(--rule-faint);
+    stroke-width: 1;
+  }
+
+  .deflation__grid--base,
+  .deflation__mark {
+    stroke: var(--ink);
+    stroke-width: 1;
+  }
+
+  .deflation__tick,
+  .deflation__axis {
+    font-family: var(--serif);
+    font-size: 12px;
+    fill: var(--ink-3);
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+
+  .deflation__axis {
+    font-style: italic;
+  }
+
+  .deflation__curve {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 1.6;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+
+  .deflation__drop {
+    stroke: var(--ink-3);
+    stroke-width: 1;
+    stroke-dasharray: 2 4;
+  }
+
+  .deflation__leader {
+    stroke: var(--ink-3);
+    stroke-width: 1;
+  }
+
+  .deflation__point {
+    fill: var(--ink);
+    stroke: var(--paper);
+    stroke-width: 2;
+  }
+
+  .deflation__point--open {
+    fill: var(--paper);
+    stroke: var(--ink);
+    stroke-width: 1.4;
+  }
+
+  .deflation__note {
+    font-family: var(--serif);
+    font-size: 13px;
+    fill: var(--ink);
+    font-variant-numeric: lining-nums;
+  }
+</style>

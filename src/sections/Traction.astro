@@ -1,0 +1,203 @@
+---
+import MorningRow from "../components/MorningRow.astro";
+
+/*
+  The numbers, set close together in one ruled strip, and under them one
+  line on what each department has running, then one morning from the
+  record. These are today's figures.
+*/
+const FIGURES = [
+  { value: "58", label: "signals in production" },
+  { value: "250+", label: "hypotheses documented" },
+  { value: "151", label: "datasets in the lake" },
+  { value: "16", label: "years of point-in-time history" },
+  { value: "2,400", label: "stocks covered daily" },
+  { value: "180", label: "research runs" },
+  { value: "510", label: "self-written changes in ten weeks" },
+  { value: "1", label: "live book, proprietary capital" },
+];
+
+const RUNNING = [
+  { name: "Onboarding", text: "151 datasets backfilled to 2010, every row stamped with the moment it was learned." },
+  { name: "Research", text: "58 signals in production out of 250+ documented hypotheses, across price, fundamental, event, analyst, news and ownership data." },
+  { name: "HDS / Backtesting", text: "Combinatorial purged cross-validation, a deflated Sharpe bar and leakage tripwires. Every verdict is recomputed and signed." },
+  { name: "Risk", text: "A factor model of seven styles and 31 industries, re-estimated every trading day." },
+  { name: "Portfolio Management", text: "A constrained solve over about 2,400 stocks each day. Any day’s plan replays exactly." },
+  { name: "Execution", text: "Thirteen waves of orders a session, each reconciled against the broker first." },
+];
+---
+
+<section class="screen" id="traction" aria-labelledby="traction-title">
+  <div class="wrap">
+    <div data-reveal>
+      <p class="label screen__label"><span class="mono">05</span> Traction</p>
+      <h2 class="claim" id="traction-title">Already trading.</h2>
+    </div>
+
+    <dl class="strip" data-reveal>
+      {
+        FIGURES.map((f) => (
+          <div class="strip__cell">
+            <dd class="mono">{f.value}</dd>
+            <dt class="mono">{f.label}</dt>
+          </div>
+        ))
+      }
+    </dl>
+
+    <ul class="running" data-reveal>
+      {
+        RUNNING.map((row, i) => (
+          <li>
+            <span class="running__no mono">{String(i + 1).padStart(2, "0")}</span>
+            <span class="running__name">{row.name}</span>
+            <span class="running__text">{row.text}</span>
+          </li>
+        ))
+      }
+    </ul>
+
+    <MorningRow />
+  </div>
+</section>
+
+<style>
+  /* One ruled strip: every figure a cell, a hairline between each. */
+  .strip {
+    display: grid;
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    margin-top: clamp(1.5rem, 2.6vw, 2.1rem);
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .strip__cell {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.95rem 1rem 1.05rem;
+    border-left: 1px solid var(--rule);
+  }
+
+  .strip__cell:first-child {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .strip dd {
+    font-size: clamp(1.35rem, 1rem + 0.9vw, 1.8rem);
+    line-height: 1;
+    letter-spacing: -0.01em;
+    color: var(--copper);
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+
+  .strip dt {
+    font-size: 0.66rem;
+    line-height: 1.4;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  /* What each department has running: six lines, in two columns. */
+  .running {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(2rem, 5vw, 5rem);
+    margin-block: clamp(0.6rem, 1.2vw, 1rem) clamp(1.6rem, 2.6vw, 2.2rem);
+  }
+
+  .running li {
+    display: grid;
+    grid-template-columns: 1.9rem 11.5rem minmax(0, 1fr);
+    align-items: baseline;
+    gap: 0 0.9rem;
+    padding: 0.62rem 0 0.68rem;
+    border-bottom: 1px solid var(--rule-faint);
+    font-size: var(--step--1);
+    line-height: 1.45;
+  }
+
+  .running__no {
+    font-size: 0.72rem;
+    color: var(--copper-mark);
+  }
+
+  .running__name {
+    font-family: var(--display);
+    font-size: 1.12rem;
+    line-height: 1.2;
+    color: var(--ink);
+  }
+
+  .running__text {
+    color: var(--ink-2);
+  }
+
+  @media (min-width: 74.01rem) and (max-height: 52rem) {
+    .strip {
+      margin-top: 1.1rem;
+    }
+
+    .strip__cell {
+      padding-block: 0.7rem 0.8rem;
+    }
+
+    .running {
+      margin-block: 0.3rem 1.2rem;
+    }
+
+    .running li {
+      padding: 0.45rem 0 0.5rem;
+    }
+  }
+
+  @media (max-width: 74rem) {
+    .strip {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .strip__cell:nth-child(4n + 1) {
+      padding-left: 0;
+      border-left: 0;
+    }
+
+    .strip__cell:nth-child(n + 5) {
+      border-top: 1px solid var(--rule);
+    }
+
+    .running {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .strip {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .strip__cell,
+    .strip__cell:nth-child(4n + 1) {
+      padding-left: 1rem;
+      border-left: 1px solid var(--rule);
+    }
+
+    .strip__cell:nth-child(2n + 1) {
+      padding-left: 0;
+      border-left: 0;
+    }
+
+    .strip__cell:nth-child(n + 3) {
+      border-top: 1px solid var(--rule);
+    }
+
+    .running li {
+      grid-template-columns: 1.9rem minmax(0, 1fr);
+    }
+
+    .running__text {
+      grid-column: 2;
+    }
+  }
+</style>

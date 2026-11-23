@@ -1,0 +1,293 @@
+---
+/*
+  The floor clock: twenty-four hours in New York, read clockwise from
+  midnight at the top.
+
+    outer ring   research, which never stops
+    middle ring  the book's day, stage by stage
+    inner ring   people, which is empty
+
+  Drawn at build time. In the browser a hand is set to the present
+  time in New York and the stage the schedule has running is lit.
+*/
+import { floorAt, STAGES, WAVES } from "../lib/floor";
+
+interface Props {
+  /** Freeze the clock at a New York time of day (hours) instead of following the present. Used by the share card. */
+  at?: number;
+  /** Weekday name to show with a frozen clock. */
+  day?: string;
+}
+
+const { at, day = "Tuesday" } = Astro.props;
+const fixed = at !== undefined;
+const fixedStage = fixed ? floorAt(at, 2).stage : null;
+const fixedClock = fixed
+  ? `${String(Math.floor(at)).padStart(2, "0")}:${String(Math.round((at % 1) * 60)).padStart(2, "0")}`
+  : "";
+
+const SIZE = 600;
+const C = SIZE / 2;
+const R = { hourLabel: 287, tick: 266, research: 240, band: 205, people: 158 };
+const BAND = 27;
+const GAP = 0.09;
+/* Cap height of the ring labels, in user units. A label is centred in
+   its band by moving its baseline half of this inward or outward. */
+const CAP = 8;
+
+const point = (hours: number, r: number): [number, number] => {
+  const a = (hours / 24) * Math.PI * 2;
+  return [C + r * Math.sin(a), C - r * Math.cos(a)];
+};
+const xy = (hours: number, r: number) => point(hours, r).map((n) => n.toFixed(2)).join(" ");
+
+/** An arc from one time to another; `reverse` draws it anticlockwise. */
+const arc = (from: number, to: number, r: number, reverse = false) => {
+  const large = to - from > 12 ? 1 : 0;
+  return reverse
+    ? `M${xy(to, r)} A${r} ${r} 0 ${large} 0 ${xy(from, r)}`
+    : `M${xy(from, r)} A${r} ${r} 0 ${large} 1 ${xy(to, r)}`;
+};
+
+/** Labels in the lower half are set on a reversed path so they read upright. */
+const lower = (from: number, to: number) => {
+  const mid = (((from + to) / 2) % 24) / 24;
+  return mid > 0.25 && mid < 0.75;
+};
+
+const hours = Array.from({ length: 24 }, (_, h) => h);
+---
+
+<figure class="dial" data-dial={fixed ? "fixed" : "live"}>
+  <svg viewBox={`0 0 ${SIZE} ${SIZE}`} role="img" aria-labelledby="dial-title dial-desc">
+    <title id="dial-title">A day on the floor, as a twenty-four hour clock</title>
+    <desc id="dial-desc">
+      Three rings. The outer ring, research, is unbroken: it runs around the clock. The middle ring is the book's day:
+      reconcile from four to six in the afternoon New York time, then ingest, signals, risk and the day's decision overnight,
+      then thirteen execution waves from a quarter to ten until the close. The inner ring, people, is empty.
+    </desc>
+    <defs>
+      {
+        STAGES.map((s) => (
+          <path
+            id={`dial-label-${s.id}`}
+            d={arc(s.from + GAP, s.to - GAP, R.band + (lower(s.from, s.to) ? CAP / 2 : -CAP / 2), lower(s.from, s.to))}
+          />
+        ))
+      }
+      <path id="dial-label-research" d={arc(19, 29, R.research + 8)}></path>
+      <path id="dial-label-people" d={arc(19, 29, R.people + 8)}></path>
+    </defs>
+
+    <!-- hours -->
+    <g class="dial__hours">
+      {
+        hours.map((h) => {
+          const major = h % 6 === 0;
+          return <line class:list={{ major }} x1={point(h, R.tick)[0]} y1={point(h, R.tick)[1]} x2={point(h, R.tick + (major ? 9 : 5))[0]} y2={point(h, R.tick + (major ? 9 : 5))[1]} />;
+        })
+      }
+      {
+        [0, 6, 12, 18].map((h) => (
+          <text x={point(h, R.hourLabel)[0]} y={point(h, R.hourLabel)[1]} text-anchor="middle" dominant-baseline="central">
+            {String(h).padStart(2, "0")}
+          </text>
+        ))
+      }
+    </g>
+
+    <!-- research: one unbroken ring -->
+    <circle class="dial__research" cx={C} cy={C} r={R.research}></circle>
+    <text class="dial__label dial__label--research">
+      <textPath href="#dial-label-research" startOffset="50%" text-anchor="middle">Research · around the clock</textPath>
+    </text>
+
+    <!-- the book's day -->
+    <g class="dial__day">
+      {
+        STAGES.map((s) => (
+          <g data-stage={s.id} class:list={{ "is-now": s.id === fixedStage }}>
+            <path class="dial__band" d={arc(s.from + GAP, s.to - GAP, R.band)} stroke-width={BAND} />
+            <text class="dial__label">
+              <textPath href={`#dial-label-${s.id}`} startOffset="50%" text-anchor="middle">
+                {s.id === "execute" ? "Execute · thirteen waves" : s.label}
+              </textPath>
+            </text>
+          </g>
+        ))
+      }
+      {
+        WAVES.map((t) => (
+          <line class="dial__wave" x1={point(t, R.band - BAND / 2)[0]} y1={point(t, R.band - BAND / 2)[1]} x2={point(t, R.band - BAND / 2 - 7)[0]} y2={point(t, R.band - BAND / 2 - 7)[1]} />
+        ))
+      }
+    </g>
+
+    <!-- people: a ring with nothing on it -->
+    <circle class="dial__people" cx={C} cy={C} r={R.people}></circle>
+    <text class="dial__label dial__label--people">
+      <textPath href="#dial-label-people" startOffset="50%" text-anchor="middle">People · the mandate and the halt</textPath>
+    </text>
+
+    <!-- now -->
+    <g class:list={["dial__hand", { "is-off": !fixed }]} data-hand transform={`rotate(${(((at ?? 0) / 24) * 360).toFixed(2)} ${C} ${C})`}>
+      <line x1={C} y1={C - R.people + 12} x2={C} y2={C - R.tick - 9}></line>
+      <circle cx={C} cy={C - R.research} r="4.5"></circle>
+    </g>
+
+    <text class="dial__day-name" x={C} y={C - 46} text-anchor="middle" data-day>{fixed ? day : "A day on the floor"}</text>
+    <text class="dial__time" x={C} y={C + 20} text-anchor="middle" data-clock>{fixed ? fixedClock : "24h"}</text>
+    <text class="dial__zone" x={C} y={C + 52} text-anchor="middle">New York</text>
+  </svg>
+</figure>
+
+<script>
+  import { floorAt, newYork } from "../lib/floor";
+
+  const dial = document.querySelector<HTMLElement>('[data-dial="live"]');
+  if (dial) {
+    const hand = dial.querySelector<SVGGElement>("[data-hand]")!;
+    const clock = dial.querySelector<SVGTextElement>("[data-clock]")!;
+    const day = dial.querySelector<SVGTextElement>("[data-day]")!;
+    const stages = [...dial.querySelectorAll<SVGGElement>("[data-stage]")];
+    const lines = document.querySelectorAll<HTMLElement>("[data-floor-now]");
+    const stamps = document.querySelectorAll<HTMLElement>("[data-floor-clock]");
+
+    const update = (): void => {
+      const now = newYork(new Date());
+      const state = floorAt(now.hours, now.weekday);
+
+      hand.classList.remove("is-off");
+      hand.setAttribute("transform", `rotate(${((now.hours / 24) * 360).toFixed(2)} 300 300)`);
+      clock.textContent = now.clock;
+      day.textContent = now.day;
+      stages.forEach((el) => el.classList.toggle("is-now", el.dataset.stage === state.stage));
+      lines.forEach((el) => (el.textContent = state.text));
+      stamps.forEach((el) => (el.textContent = `${now.clock} in New York`));
+      document.documentElement.classList.add("has-floor-clock");
+    };
+
+    update();
+    /* Re-read the clock on the minute, not every frame. */
+    const tick = (): void => {
+      update();
+      window.setTimeout(tick, 60_000 - (Date.now() % 60_000) + 50);
+    };
+    window.setTimeout(tick, 60_000 - (Date.now() % 60_000) + 50);
+    document.addEventListener("visibilitychange", () => !document.hidden && update());
+  }
+</script>
+
+<style>
+  .dial {
+    width: 100%;
+  }
+
+  svg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .dial__hours line {
+    stroke: var(--ink-3);
+    stroke-width: 1;
+    opacity: 0.7;
+  }
+
+  .dial__hours line.major {
+    stroke: var(--ink);
+    opacity: 1;
+  }
+
+  .dial__hours text {
+    font-family: var(--mono);
+    font-size: 12px;
+    fill: var(--ink-3);
+  }
+
+  .dial__research {
+    fill: none;
+    stroke: var(--copper-mark);
+    stroke-width: 1.5;
+  }
+
+  .dial__people {
+    fill: none;
+    stroke: var(--ink-3);
+    stroke-width: 1;
+    stroke-dasharray: 1.5 6;
+    stroke-linecap: round;
+  }
+
+  .dial__band {
+    fill: none;
+    stroke: var(--band);
+    transition: stroke 400ms ease;
+  }
+
+  .dial__label {
+    font-family: var(--serif);
+    font-size: 11.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    fill: var(--ink-2);
+    transition: fill 400ms ease;
+  }
+
+  .dial__label--research {
+    fill: var(--copper);
+  }
+
+  .dial__label--people {
+    fill: var(--ink-3);
+  }
+
+  .dial__wave {
+    stroke: var(--ink-3);
+    stroke-width: 1;
+  }
+
+  .is-now .dial__band {
+    stroke: var(--copper-wash);
+  }
+
+  .is-now .dial__label {
+    fill: var(--copper);
+  }
+
+  .dial__hand line {
+    stroke: var(--copper-mark);
+    stroke-width: 1.25;
+    stroke-linecap: round;
+  }
+
+  .dial__hand circle {
+    fill: var(--copper-mark);
+    stroke: var(--paper);
+    stroke-width: 2.5;
+  }
+
+  /* No hand until the browser knows what time it is. */
+  .dial__hand.is-off {
+    display: none;
+  }
+
+  .dial__time {
+    font-family: var(--display);
+    font-size: 78px;
+    font-weight: 380;
+    letter-spacing: -0.02em;
+    fill: var(--ink);
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+
+  .dial__day-name,
+  .dial__zone {
+    font-family: var(--serif);
+    font-size: 12.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    fill: var(--ink-3);
+  }
+</style>

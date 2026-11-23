@@ -1,0 +1,256 @@
+---
+/*
+  The research loop as a ring that turns, clockwise from the top. A
+  point of light runs the loop without stopping. Stations are placed
+  from the list below. Below the width at which the labels stay
+  readable the ring gives way to the same six steps as a list.
+*/
+const LOOP = [
+  { name: "Sense", by: "The platform", text: ["A decaying signal or a gap", "in coverage becomes a mandate."] },
+  { name: "Fund", by: "Principal investigator", text: ["Compute is capital. It goes", "where the evidence is."] },
+  { name: "Generate", by: "The swarm", text: ["Thousands of ideas, and the", "dead ones are checked first."] },
+  { name: "Build", by: "Research pods", text: ["Candidates are built on", "point-in-time data."] },
+  { name: "Judge", by: "The referee", text: ["Recomputed in a sandbox,", "then signed."] },
+  { name: "Deploy", by: "The book", text: ["Survivors start small and", "earn their weight."] },
+] as const;
+
+const W = 880;
+const H = 680;
+const CX = W / 2;
+const CY = H / 2;
+const R = 186;
+const n = LOOP.length;
+
+const at = (i: number, r: number): [number, number] => {
+  const a = (i / n) * Math.PI * 2;
+  return [CX + r * Math.sin(a), CY - r * Math.cos(a)];
+};
+
+const arcBetween = (i: number) => {
+  const pad = 0.085;
+  const a0 = ((i + pad) / n) * Math.PI * 2;
+  const a1 = ((i + 1 - pad) / n) * Math.PI * 2;
+  const p = (a: number) => `${(CX + R * Math.sin(a)).toFixed(1)} ${(CY - R * Math.cos(a)).toFixed(1)}`;
+  return `M${p(a0)} A${R} ${R} 0 0 1 ${p(a1)}`;
+};
+
+const stations = LOOP.map((step, i) => {
+  const [x, y] = at(i, R);
+  const [lx, ly] = at(i, R + 34);
+  const sin = Math.sin((i / n) * Math.PI * 2);
+  const cos = Math.cos((i / n) * Math.PI * 2);
+  const anchor = Math.abs(sin) < 0.3 ? "middle" : sin > 0 ? "start" : "end";
+  /* labels above the ring grow upward, labels below grow downward */
+  const block = 80;
+  const top = Math.abs(sin) < 0.3 ? (cos > 0 ? ly - block + 8 : ly + 10) : ly - block / 2 + 8;
+  return { step, x, y, lx, top, anchor };
+});
+
+/* The runner's tail: short arcs behind the point, each fainter than the last. */
+const TAIL = 9;
+const tail = Array.from({ length: TAIL }, (_, k) => {
+  const a0 = (-(k + 1) * 5 * Math.PI) / 180;
+  const a1 = (-k * 5 * Math.PI) / 180;
+  const p = (a: number) => `${(CX + R * Math.sin(a)).toFixed(1)} ${(CY - R * Math.cos(a)).toFixed(1)}`;
+  return { d: `M${p(a0)} A${R} ${R} 0 0 1 ${p(a1)}`, o: (1 - k / TAIL) * 0.85 };
+});
+---
+
+<figure class="loop" data-reveal>
+  <p class="bounded__label label"><span>People hold the mandate and the halt</span></p>
+  <div class="bounded__body loop__body">
+  <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="loop-title loop-desc">
+    <title id="loop-title">The research loop</title>
+    <desc id="loop-desc">
+      A ring of six steps, read clockwise: sense, fund, generate, build, judge, deploy. Deploying returns to sensing, and
+      the loop never stops. At the centre is institutional memory, which every step reads and writes. People sit outside the
+      loop and hold the mandate and the halt.
+    </desc>
+    <defs>
+      <marker id="loop-tip" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="8" markerHeight="8" orient="auto">
+        <path d="M0.8 0.9 L7 4 L0.8 7.1" fill="none" stroke="context-stroke" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"></path>
+      </marker>
+    </defs>
+
+    {LOOP.map((_, i) => <path class="loop__arc" d={arcBetween(i)} marker-end="url(#loop-tip)" />)}
+
+    <g class="loop__runner">
+      {tail.map((t) => <path class="loop__tail" d={t.d} style={`opacity:${t.o.toFixed(2)}`} />)}
+      <circle class="loop__point" cx={CX} cy={CY - R} r="4.5"></circle>
+    </g>
+
+    {
+      stations.map(({ step, x, y, lx, top, anchor }) => (
+        <g>
+          <circle class:list={["loop__station", { "loop__station--gate": step.name === "Judge" }]} cx={x} cy={y} r="5.5" />
+          <text class="loop__by" x={lx} y={top} text-anchor={anchor}>
+            {step.by}
+          </text>
+          <text class="loop__name" x={lx} y={top + 33} text-anchor={anchor}>
+            {step.name}
+          </text>
+          {step.text.map((line, k) => (
+            <text class="loop__text" x={lx} y={top + 58 + k * 22} text-anchor={anchor}>
+              {line}
+            </text>
+          ))}
+        </g>
+      ))
+    }
+
+    <circle class="loop__memory" cx={CX} cy={CY} r="110"></circle>
+    <text class="loop__by" x={CX} y={CY - 44} text-anchor="middle">Institutional</text>
+    <text class="loop__by" x={CX} y={CY - 26} text-anchor="middle">memory</text>
+    <text class="loop__centre" x={CX} y={CY + 14} text-anchor="middle">Nothing is</text>
+    <text class="loop__centre" x={CX} y={CY + 43} text-anchor="middle">tried twice.</text>
+  </svg>
+
+  <ol class="loop__list">
+    {
+      LOOP.map((step) => (
+        <li>
+          <span class="label">{step.by}</span>
+          <strong>{step.name}</strong>
+          <span>{step.text.join(" ")}</span>
+        </li>
+      ))
+    }
+  </ol>
+  </div>
+</figure>
+
+<style>
+  .loop__body {
+    padding: clamp(0.4rem, 1vw, 1rem) clamp(0.6rem, 1.5vw, 1.4rem) clamp(1.2rem, 2vw, 1.8rem);
+  }
+
+  svg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .loop__arc {
+    fill: none;
+    stroke: var(--ink-3);
+    stroke-width: 1.1;
+    stroke-linecap: round;
+  }
+
+  .loop__station {
+    fill: var(--paper);
+    stroke: var(--ink);
+    stroke-width: 1.4;
+  }
+
+  .loop__station--gate {
+    fill: var(--copper-mark);
+    stroke: var(--copper-mark);
+  }
+
+  .loop__memory {
+    fill: none;
+    stroke: var(--ink-3);
+    stroke-width: 1;
+    stroke-dasharray: 1.5 6;
+    stroke-linecap: round;
+  }
+
+  .loop__by {
+    font-family: var(--serif);
+    font-size: 13.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    fill: var(--ink-3);
+  }
+
+  .loop__name {
+    font-family: var(--display);
+    font-size: 34px;
+    letter-spacing: -0.01em;
+    fill: var(--ink);
+  }
+
+  .loop__text {
+    font-family: var(--serif);
+    font-size: 17.5px;
+    fill: var(--ink-2);
+  }
+
+  .loop__centre {
+    font-family: var(--display);
+    font-size: 26px;
+    letter-spacing: -0.01em;
+    fill: var(--ink);
+  }
+
+  .loop__tail {
+    fill: none;
+    stroke: var(--copper);
+    stroke-width: 2.4;
+  }
+
+  .loop__point {
+    fill: var(--copper);
+  }
+
+  .loop__runner {
+    transform-box: view-box;
+    transform-origin: 50% 50%;
+    transform: rotate(118deg);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .loop__runner {
+      animation: loop-run 14s linear infinite;
+    }
+  }
+
+  @keyframes loop-run {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .loop__list {
+    display: none;
+  }
+
+  @media (max-width: 52rem) {
+    svg {
+      display: none;
+    }
+
+    .loop__body {
+      padding: 0.4rem 1.2rem 0.4rem;
+    }
+
+    .loop__list {
+      display: grid;
+    }
+
+    .loop__list li {
+      display: grid;
+      gap: 0.15rem;
+      padding: 0.9rem 0 1rem;
+      border-bottom: 1px solid var(--rule-faint);
+    }
+
+    .loop__list li:last-child {
+      border-bottom: 0;
+    }
+
+    .loop__list strong {
+      font-family: var(--display);
+      font-size: var(--step-1);
+      font-weight: 400;
+    }
+
+    .loop__list li > span:last-child {
+      color: var(--ink-2);
+    }
+  }
+</style>

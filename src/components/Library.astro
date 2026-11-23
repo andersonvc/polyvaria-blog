@@ -1,0 +1,162 @@
+---
+/*
+  The library: one mark for every hypothesis on the record, by family
+  and by what became of it. Copper is in the book. Hollow is on the
+  bench. Red was refused.
+*/
+import { FAMILIES } from "../content/library";
+
+const kinds = [
+  { key: "book", label: "In the book" },
+  { key: "bench", label: "On the bench" },
+  { key: "retired", label: "Retired" },
+  { key: "rejected", label: "Turned down" },
+] as const;
+
+const totals = Object.fromEntries(kinds.map((k) => [k.key, FAMILIES.reduce((sum, f) => sum + f[k.key], 0)]));
+const all = Object.values(totals).reduce((a, b) => a + b, 0);
+---
+
+<figure class="library">
+  <ul class="library__legend">
+    {
+      kinds.map((kind) => (
+        <li>
+          <i class={kind.key} aria-hidden="true" />
+          <span class="num">{totals[kind.key]}</span> {kind.label.toLowerCase()}
+        </li>
+      ))
+    }
+  </ul>
+
+  <table>
+    <caption class="visually-hidden">{all} hypotheses by signal family and outcome</caption>
+    <thead class="visually-hidden">
+      <tr>
+        <th scope="col">Family</th>
+        <th scope="col">Hypotheses</th>
+        <th scope="col">Count</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        FAMILIES.map((family) => {
+          const total = family.book + family.bench + family.rejected + family.retired;
+          const summary = kinds
+            .filter((k) => family[k.key] > 0)
+            .map((k) => `${family[k.key]} ${k.label.toLowerCase()}`)
+            .join(", ");
+          return (
+            <tr>
+              <th scope="row">{family.name}</th>
+              <td>
+                <div class="library__marks" role="img" aria-label={summary}>
+                  {kinds.flatMap((k) => Array.from({ length: family[k.key] }, () => <i class={k.key} />))}
+                </div>
+              </td>
+              <td class="library__count num">{total}</td>
+            </tr>
+          );
+        })
+      }
+    </tbody>
+  </table>
+</figure>
+
+<style>
+  .library__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
+    padding-bottom: 1rem;
+    font-size: var(--step--1);
+    color: var(--ink-2);
+  }
+
+  .library__legend li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .library__legend .num {
+    color: var(--ink);
+  }
+
+  table {
+    border-top: 1px solid var(--ink);
+    font-size: var(--step--1);
+    line-height: 1.3;
+  }
+
+  th,
+  td {
+    padding: 0.52rem 0;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--rule-faint);
+  }
+
+  tbody th {
+    width: 13.5rem;
+    padding-right: 1rem;
+    color: var(--ink);
+  }
+
+  .library__marks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  i {
+    display: block;
+    width: 10px;
+    height: 10px;
+    flex: none;
+    border: 1px solid var(--ink-3);
+  }
+
+  i.book {
+    background: var(--copper-mark);
+    border-color: var(--copper-mark);
+  }
+
+  i.rejected,
+  i.retired {
+    border-color: var(--red);
+  }
+
+  i.rejected {
+    background:
+      linear-gradient(
+        to bottom right,
+        transparent calc(50% - 0.6px),
+        var(--red) calc(50% - 0.6px),
+        var(--red) calc(50% + 0.6px),
+        transparent calc(50% + 0.6px)
+      ),
+      var(--red-wash);
+  }
+
+  .library__count {
+    width: 2.4rem;
+    text-align: right;
+    color: var(--ink-3);
+  }
+
+  @media (max-width: 40rem) {
+    tbody th {
+      width: 8.5rem;
+      font-size: var(--step--2);
+    }
+
+    i {
+      width: 7px;
+      height: 7px;
+    }
+
+    .library__marks {
+      gap: 3px;
+    }
+  }
+</style>

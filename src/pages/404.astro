@@ -1,0 +1,28 @@
+---
+import Document from "../layouts/Document.astro";
+---
+
+<Document title="Polyvaria: no such page" description="There is nothing at this address." nav={false}>
+  <div class="wrap missing">
+    <p class="label">404</p>
+    <h1>No one is on this floor <span class="live">either.</span></h1>
+    <p class="lede">The address does not match a page. Polyvaria has one, and it <a href="/">starts here</a>.</p>
+  </div>
+</Document>
+
+<style>
+  .missing {
+    display: grid;
+    gap: 1.6rem;
+    padding-block: clamp(3rem, 12vw, 9rem);
+  }
+
+  h1 {
+    font-family: var(--display);
+    font-size: var(--step-4);
+    line-height: 1;
+    letter-spacing: -0.026em;
+    font-weight: 370;
+    max-width: 12ch;
+  }
+</style>

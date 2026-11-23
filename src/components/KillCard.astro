@@ -1,0 +1,211 @@
+---
+/*
+  The signal that was killed, as one card from the research log. The
+  two bars are drawn to scale: what the first read said, and what the
+  full history said. Copper for the read that shipped it, red for the
+  verdict that removed it.
+*/
+const FIRST = 3.04;
+const FULL = 0.12;
+const scale = (v: number) => `${((v / FIRST) * 100).toFixed(1)}%`;
+---
+
+<figure class="kill" data-reveal>
+  <header>
+    <span class="label">Research log · Exhibit A</span>
+    <span class="kill__signed mono">machine-signed</span>
+  </header>
+
+  <p class="kill__name mono">insider_grade_consensus</p>
+  <p class="kill__life">Shipped June 2026. Retired July 2026.</p>
+
+  <div class="kill__reads" role="img" aria-label="Information-coefficient t-statistic: 3.04 on the first read of 77 names, 0.12 on the full history.">
+    <div class="read">
+      <p class="label">First read · 77 names</p>
+      <p class="read__row">
+        <span class="read__value">3.04</span>
+        <span class="read__bar" style={`--w:${scale(FIRST)}`}></span>
+      </p>
+    </div>
+    <div class="read read--full">
+      <p class="label">Full history · durable in 0 of 3 regimes</p>
+      <p class="read__row">
+        <span class="read__value">0.12</span>
+        <span class="read__bar" style={`--w:${scale(FULL)}`}></span>
+      </p>
+    </div>
+    <p class="kill__unit mono">IC t-statistic</p>
+  </div>
+
+  <p class="kill__verdict">
+    <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></svg>
+    Deleted from production
+  </p>
+  <p class="kill__foot mono">1,647 partitions dropped · recomputed from pinned inputs</p>
+</figure>
+
+<style>
+  .kill {
+    padding: clamp(1.2rem, 2vw, 1.7rem) clamp(1.3rem, 2.4vw, 2rem);
+    border: 1px solid var(--ink-3);
+    background: var(--paper-raise);
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .kill__signed {
+    font-size: 0.72rem;
+    color: var(--ink-3);
+  }
+
+  .kill__name {
+    margin-top: 1rem;
+    font-size: clamp(1.05rem, 0.9rem + 0.7vw, 1.45rem);
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    overflow-wrap: anywhere;
+  }
+
+  .kill__life {
+    margin-top: 0.3rem;
+    color: var(--ink-3);
+    font-size: var(--step--1);
+  }
+
+  .kill__reads {
+    position: relative;
+    display: grid;
+    gap: 1rem;
+    margin-top: 1.2rem;
+  }
+
+  .read__row {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    align-items: center;
+    gap: 1.4rem;
+    margin-top: 0.35rem;
+  }
+
+  .read__value {
+    font-family: var(--display);
+    font-size: clamp(2rem, 1.3rem + 2.4vw, 3.2rem);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    font-variant-numeric: lining-nums tabular-nums;
+    color: var(--copper);
+    min-width: 1.9em;
+  }
+
+  .read__bar {
+    display: block;
+    height: 0.9rem;
+    width: var(--w);
+    min-width: 3px;
+    background: var(--copper-mark);
+  }
+
+  .read--full .read__value {
+    color: var(--red);
+  }
+
+  .read--full .read__bar {
+    background: var(--red);
+  }
+
+  .kill__unit {
+    font-size: 0.72rem;
+    color: var(--ink-3);
+    text-align: right;
+    margin-top: -0.7rem;
+  }
+
+  .kill__verdict {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-top: 1.1rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--rule);
+    font-family: var(--display);
+    font-size: clamp(1.4rem, 1.1rem + 1vw, 1.9rem);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    color: var(--red);
+  }
+
+  .kill__verdict svg {
+    flex: none;
+    width: 0.62em;
+    height: 0.62em;
+  }
+
+  .kill__foot {
+    margin-top: 0.6rem;
+    font-size: 0.74rem;
+    color: var(--ink-3);
+  }
+
+  @media (min-width: 62.01rem) and (max-height: 52rem) {
+    .kill {
+      padding-block: 1rem 1.1rem;
+    }
+
+    .kill__name {
+      margin-top: 0.7rem;
+    }
+
+    .kill__reads {
+      gap: 0.6rem;
+      margin-top: 0.8rem;
+    }
+
+    .read__value {
+      font-size: 2.3rem;
+    }
+
+    .kill__verdict {
+      margin-top: 0.7rem;
+      padding-top: 0.65rem;
+      font-size: 1.45rem;
+    }
+  }
+
+  /* The bars grow as the card comes into view; the verdict lands last. */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .kill .read__bar {
+      width: 0;
+      min-width: 0;
+    }
+
+    :global(.js) .kill .kill__verdict,
+    :global(.js) .kill .kill__foot {
+      opacity: 0;
+    }
+
+    :global(.js) .kill.is-in .read__bar {
+      width: var(--w);
+      min-width: 3px;
+      transition:
+        width 1.1s cubic-bezier(0.2, 0.7, 0.2, 1) 0.5s,
+        min-width 0s 0.5s;
+    }
+
+    :global(.js) .kill.is-in .read--full .read__bar {
+      transition-delay: 1.5s;
+    }
+
+    :global(.js) .kill.is-in .kill__verdict,
+    :global(.js) .kill.is-in .kill__foot {
+      opacity: 1;
+      transition: opacity 0.6s ease 2.3s;
+    }
+  }
+</style>

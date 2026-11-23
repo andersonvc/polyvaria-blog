@@ -1,0 +1,156 @@
+---
+import KillCard from "../components/KillCard.astro";
+
+/* The actual thresholds, set close together under the claim. */
+const METHODS = [
+  { k: "cross-validation", v: "CPCV, C(6,2) = 15 splits · purge ≥ 21 bars · embargo 10 bars" },
+  { k: "acceptance", v: "deflated Sharpe probability ≥ 0.95 · PBO ≤ 0.5" },
+  { k: "scoring costs", v: "1 bp commission · next-open fills · impact charged first" },
+  { k: "leakage tripwires", v: "future-invariance · planted canary · measured lookback" },
+  { k: "durability screen", v: "same-sign IC, |t| > 1 in each of 2012–16, 2017–21, 2022–26" },
+  { k: "sandbox", v: "no network · read-only root · 4 GB / 1,200 CPU-second caps" },
+  { k: "verdicts", v: "ECDSA P-256 over the code, config and data-snapshot hashes" },
+  { k: "numeric oracle", v: "rtol 1e-9 against an independent implementation" },
+  { k: "skeptic panel", v: "three adversarial verifiers, five on dissent · doubt rejects" },
+  { k: "onboarding", v: "512 MB memory ceiling proven before any backfill" },
+  { k: "ml overlay", v: "pre-registered · purge and embargo by horizon · walk-forward" },
+  { k: "risk model", v: "daily WLS · Newey-West · eigenfactor adj. · vol-regime scaling" },
+];
+
+/* The claim, in practice. */
+const POINTS = [
+  { lead: "The referee recomputes every statistic in a sandbox and signs the verdict.", rest: "" },
+  { lead: "Every result is deflated at the program’s trial count, not the run’s.", rest: "A signal that passed at three trials failed at eight." },
+  { lead: "A passing backtest is not enough.", rest: "One signal cleared the referee at a deflated Sharpe of 1.02 and was retracted as market beta." },
+  { lead: "Going live is a person’s decision. So is the halt.", rest: "" },
+];
+---
+
+<section class="screen" id="trust" aria-labelledby="trust-title">
+  <div class="wrap">
+    <div class="split">
+      <div data-reveal>
+        <p class="label screen__label"><span class="mono">04</span> Trust</p>
+        <h2 class="claim" id="trust-title">Nothing reaches the book on <em>an agent’s word.</em></h2>
+        <ul class="points">
+          {
+            POINTS.map((p) => (
+              <li>
+                {p.lead}
+                {p.rest && <span> {p.rest}</span>}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <KillCard />
+    </div>
+
+    <div class="methods" data-reveal>
+      <p class="label methods__title">The actual thresholds</p>
+      <dl>
+        {
+          METHODS.map((row) => (
+            <div>
+              <dt class="mono">{row.k}</dt>
+              <dd class="mono">{row.v}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </div>
+</section>
+
+<style>
+  .split {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
+    gap: clamp(2rem, 4.5vw, 4.5rem);
+  }
+
+  .points {
+    margin-top: 1.5rem;
+  }
+
+  .points li {
+    font-size: 1.02rem;
+  }
+
+  .claim {
+    max-width: 21ch;
+  }
+
+  .claim em {
+    font-style: normal;
+    color: var(--red);
+  }
+
+  /* The methods, as a ruled table in two columns: the name of the check, then its setting. */
+  .methods {
+    margin-top: clamp(1.6rem, 2.6vw, 2.2rem);
+  }
+
+  .methods__title {
+    padding-bottom: 0.55rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  dl {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(2rem, 5vw, 5rem);
+  }
+
+  dl > div {
+    display: grid;
+    grid-template-columns: 8.6rem minmax(0, 1fr);
+    align-items: baseline;
+    gap: 0 1rem;
+    padding: 0.45rem 0 0.5rem;
+    border-bottom: 1px solid var(--rule-faint);
+  }
+
+  dt {
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--copper-mark);
+  }
+
+  dd {
+    font-size: 0.74rem;
+    line-height: 1.45;
+    color: var(--ink-2);
+  }
+
+  @media (min-width: 62.01rem) and (max-height: 52rem) {
+    .points {
+      margin-top: 1rem;
+    }
+
+    .methods {
+      margin-top: 1.1rem;
+    }
+
+    dl > div {
+      padding: 0.3rem 0 0.34rem;
+    }
+  }
+
+  @media (max-width: 62rem) {
+    .split {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    dl {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 34rem) {
+    dl > div {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.15rem;
+    }
+  }
+</style>
